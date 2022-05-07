@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/drawable/backgound_text_null.xml" value="0.119" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/drawable/background_corner_top.xml" value="0.1345" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/drawable/custom_button_stop_watching.xml" value="0.1275" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/drawable/details_button_background.xml" value="0.144" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/drawable/favorites_tint.xml" value="0.144" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/activity_details_character.xml" value="0.2" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/activity_main.xml" value="0.16032608695652173" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/activity_movie_details.xml" value="0.22" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/activity_playing_trailer.xml" value="0.16847826086956522" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/activity_watch_trailer.xml" value="0.2" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/bottom_sheet_show_trailer.xml" value="0.16847826086956522" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/item_cast_details_layout.xml" value="0.2" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/item_cast_layout.xml" value="0.2" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/item_crew_details_layout.xml" value="0.2" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/item_crew_layout.xml" value="0.2" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/item_details_layout.xml" value="0.33" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/item_recycler_view.xml" value="0.21" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/item_youtube_view.xml" value="0.2" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/layout_item_film.xml" value="0.16032608695652173" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/layout_item_film_details.xml" value="0.18614130434782608" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

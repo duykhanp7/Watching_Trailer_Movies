@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="item"
+            type="com.example.movies.model.Crew" />
+        <import type="android.view.View"/>
+    </data>
+
+
+    <com.google.android.material.card.MaterialCardView
+        xmlns:bind="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        bind:cardCornerRadius="4dp"
+        bind:cardElevation="0dp"
+        android:background="@color/white"
+        android:layout_marginStart="10dp"
+        android:minWidth="0dp"
+        android:layout_marginBottom="5dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:background="@color/black"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#D1D1D1"
+                bind:cardCornerRadius="4dp">
+
+                <ImageView
+                    android:id="@+id/posterCastDetails"
+                    android:scaleType="centerCrop"
+                    android:layout_width="110dp"
+                    android:layout_height="160dp"
+                    bind:imageURLCrew="@{item}" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:paddingStart="20dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:paddingEnd="10dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:fontFamily="monospace"
+                    android:text="@{item.name}"
+                    android:textStyle="bold"
+                    android:textColor="#FF9800"
+                    android:visibility="@{item.name == null ? View.GONE:View.VISIBLE}"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_marginTop="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:fontFamily="monospace"
+                    android:text="@{item.known_for_department}"
+                    android:visibility="@{item.known_for_department == null ? View.GONE:View.VISIBLE}"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_marginTop="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:fontFamily="monospace"
+                    android:text="@{item.job}"
+                    android:visibility="@{item.job == null ? View.GONE:View.VISIBLE}"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>
+

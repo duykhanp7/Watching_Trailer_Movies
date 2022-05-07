@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/tools"
+    xmlns:expandableTextView="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="main"
+            type="com.example.movies.activity.DetailsCharacterActivity"/>
+        <import type="android.view.View"/>
+        <import type="com.example.movies.utils.Utils"/>
+        <import type="com.example.movies.utils.BindingUtils"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            android:id="@+id/nestedScrollView">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="600dp"
+                        android:background="#D1D1D1"
+                        android:scaleType="centerCrop"
+                        android:visibility="visible"
+                        app:cast="@{main.castObservableField}"
+                        app:crew="@{main.crewObservableField}"
+                        app:type="@{main.type}" />
+
+                    <ImageView
+                        android:id="@+id/back_icon"
+                        android:layout_width="40dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:onClick="@{(view)->main.onIconBackPressed(view)}"
+                        android:src="@drawable/ic_back" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="10dp"
+                    android:layout_marginTop="-20dp"
+                    android:background="@drawable/background_corner_top">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="#FF9800"
+                            android:textSize="20sp"
+                            android:fontFamily="monospace"
+                            android:layout_weight="1.5"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:gravity="end">
+
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/facebook_ic"
+                                android:layout_marginEnd="15dp"
+                                android:id="@+id/facebookIC"
+                                android:onClick="@{(view)->BindingUtils.onButtonSocialClick(view,main.type.equals(Utils.TYPE_CAST) ? main.castObservableField.external_ids.facebook_id:main.crewObservableField.external_ids.facebook_id,Utils.FACEBOOK)}"
+                                android:paddingTop="2dp" />
+
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/instagram_ic"
+                                android:layout_marginEnd="13dp"
+                                android:id="@+id/instagramIC"
+                                android:onClick="@{(view)->BindingUtils.onButtonSocialClick(view,main.type.equals(Utils.TYPE_CAST) ? main.castObservableField.external_ids.instagram_id:main.crewObservableField.external_ids.instagram_id,Utils.INSTAGRAM)}"
+                                android:paddingTop="2dp"/>
+
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/twitter_ic"
+                                android:layout_marginEnd="8dp"
+                                android:id="@+id/twitterIC"
+                                android:onClick="@{(view)->BindingUtils.onButtonSocialClick(view,main.type.equals(Utils.TYPE_CAST) ? main.castObservableField.external_ids.twitter_id:main.crewObservableField.external_ids.twitter_id,Utils.TWITTER)}"
+                                android:paddingTop="2dp"/>
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="10dp"
+                                android:background="@drawable/favorites_ic_normal"
+                                android:id="@+id/favorites_button"
+                                android:onClick="@{(view)->main.onButtonAddToFavorites(view)}"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="7dp"
+                        android:textColor="@color/white"
+                        android:textSize="25sp"
+                        android:fontFamily="monospace"
+                        android:text="@{main.type.equals(Utils.TYPE_CAST) ? main.castObservableField.name:main.crewObservableField.name}"/>
+
+                    <TextView
+                        android:paddingStart="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="7dp"
+                        android:textColor="#979797"
+                        android:fontFamily="monospace"
+                        android:textSize="20sp"
+                        android:visibility="@{main.type.equals(Utils.TYPE_CAST) ? main.castObservableField.name.trim().empty ? View.GONE:View.VISIBLE : main.crewObservableField.name.trim().empty ? View.GONE:View.VISIBLE}"
+                        android:text="@{main.type.equals(Utils.TYPE_CAST) ? BindingUtils.getBirthdayAppendSexCast(main.castObservableField) : BindingUtils.getBirthdayAppendSexCrew(main.crewObservableField) }" />
+
+                    <TextView
+                        android:paddingStart="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#979797"
+                        android:fontFamily="monospace"
+                        android:layout_marginTop="12dp"
+                        android:textSize="18sp"
+                        android:visibility="@{main.type.equals(Utils.TYPE_CAST) ? main.castObservableField.place_of_birth.trim().empty ? View.GONE:View.VISIBLE : main.crewObservableField.place_of_birth.trim().empty ? View.GONE:View.VISIBLE}"
+                        android:text="@{main.type.equals(Utils.TYPE_CAST) ? main.castObservableField.place_of_birth:main.crewObservableField.place_of_birth}"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Known As"
+                        android:textColor="#979797"
+                        android:fontFamily="monospace"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/know_for_department"
+                        android:textColor="#979797"
+                        android:fontFamily="monospace"
+                        android:textSize="18sp"
+                        android:textAlignment="textStart"
+                        android:paddingStart="15dp"
+                        android:lineSpacingExtra="5dp"
+                        textKnowAs="@{main.type.equals(Utils.TYPE_CAST) ? main.castObservableField.also_known_as:main.crewObservableField.also_known_as}"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="10dp"
+                    android:orientation="vertical"
+                    android:visibility="@{main.type.equals(Utils.TYPE_CAST) ? main.castObservableField.biography.trim().empty ? View.GONE:View.VISIBLE : main.crewObservableField.biography.trim().empty ? View.GONE:View.VISIBLE}">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Overview"
+                        android:fontFamily="monospace"
+                        android:textSize="20sp"
+                        android:textColor="#FF9800"/>
+
+                    <io.github.glailton.expandabletextview.ExpandableTextView
+                        android:paddingStart="15dp"
+                        android:id="@+id/expandableBiography"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        expandableTextView:collapsedLines="4"
+                        expandableTextView:animDuration="500"
+                        expandableTextView:readMoreText="More"
+                        expandableTextView:readLessText="Less"
+                        expandableTextView:textMode="line"
+                        expandableTextView:isExpanded="false"
+                        app:ellipsizeTextColor="#FF9800"
+                        android:lineSpacingExtra="5dp"
+                        android:textSize="18sp"
+                        android:text='@{main.bioStringObservableField.empty ? "No biography yet":main.bioStringObservableField}'/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="90dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="30dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Movie"
+                            android:fontFamily="monospace"
+                            android:textSize="20sp"/>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/recyclerViewCast"
+                            android:layout_marginTop="5dp"
+                            android:nestedScrollingEnabled="false"
+                            android:orientation="horizontal"
+                            app:movieAdapterByIDCastCrew="@{main.movieAdapterByIDOfCastCrewObservableField}"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/ic_barrow_up"
+            app:backgroundTint="#FF9800"
+            app:tint="@color/black"
+            app:borderWidth="0dp"
+            android:id="@+id/buttonScrollToTop"
+            android:contentDescription="TODO"
+            android:onClick="@{()->main.onButtonScrollToTopClicked()}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</layout>

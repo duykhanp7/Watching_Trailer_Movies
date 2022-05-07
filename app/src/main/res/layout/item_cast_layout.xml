@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="item"
+            type="com.example.movies.model.Cast" />
+    </data>
+
+
+    <com.google.android.material.card.MaterialCardView
+        xmlns:bind="http://schemas.android.com/apk/res-auto"
+        android:layout_width="110dp"
+        android:layout_height="160dp"
+        bind:cardCornerRadius="4dp"
+        bind:cardElevation="0dp"
+        android:background="@color/white"
+        android:layout_marginStart="10dp"
+        android:minWidth="0dp"
+        >
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="160dp"
+            android:background="#D1D1D1">
+
+            <ImageView
+                android:id="@+id/posterCast"
+                android:scaleType="centerCrop"
+                android:layout_width="110dp"
+                android:layout_height="160dp"
+                bind:imageURLCast="@{item}" />
+
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>
+
