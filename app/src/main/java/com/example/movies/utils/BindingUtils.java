@@ -258,7 +258,7 @@ public class BindingUtils {
         if(movie.getStaff().getCrews() != null){
             for(Crew crew : movie.getStaff().getCrews()){
                 if(crew.getJob().equals("Director")){
-                    textView.setText(String.valueOf("Director: "+crew.getName()));
+                    textView.setText("Director: " + crew.getName());
                 }
             }
         }

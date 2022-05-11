@@ -1,23 +1,20 @@
 package com.example.movies.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ObservableField;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-
 import com.example.movies.R;
 import com.example.movies.adapter.MovieAdapterByIDOfCastCrew;
-import com.example.movies.adapter.MovieAdapterMovieID;
 import com.example.movies.api.APIGetData;
 import com.example.movies.databinding.ActivityDetailsCharacterBinding;
 import com.example.movies.listener.IMovieItemByCastCrewIDClickListener;
@@ -82,34 +79,28 @@ public class DetailsCharacterActivity extends AppCompatActivity implements IMovi
         binding.setMain(this);
 
 
-        binding.nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if(!v.canScrollVertically(-1)){
-                    binding.buttonScrollToTop.setVisibility(View.GONE);
-                    binding.buttonScrollToTop.startAnimation(animationGone);
-                }
-                else{
-                    binding.buttonScrollToTop.startAnimation(animationShow);
-                    binding.buttonScrollToTop.setVisibility(View.VISIBLE);
-                }
+        binding.nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if(!v.canScrollVertically(-1)){
+                binding.buttonScrollToTop.setVisibility(View.GONE);
+                binding.buttonScrollToTop.startAnimation(animationGone);
+            }
+            else{
+                binding.buttonScrollToTop.startAnimation(animationShow);
+                binding.buttonScrollToTop.setVisibility(View.VISIBLE);
             }
         });
     }
 
     //BUTTON ADD TO FAVORITES
     public void onButtonAddToFavorites(View view){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(!buttonFavoritesClicked){
-                    binding.favoritesButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.favorites_ic_clicked));
-                }
-                else{
-                    binding.favoritesButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.favorites_ic_normal));
-                }
-                buttonFavoritesClicked = !buttonFavoritesClicked;
+        runOnUiThread(() -> {
+            if(!buttonFavoritesClicked){
+                binding.favoritesButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.favorites_ic_clicked));
             }
+            else{
+                binding.favoritesButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.favorites_ic_normal));
+            }
+            buttonFavoritesClicked = !buttonFavoritesClicked;
         });
     }
 

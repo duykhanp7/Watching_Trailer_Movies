@@ -1,38 +1,28 @@
 package com.example.movies.adapter;
 
+import static com.example.movies.activity.DetailsMovieActivity.hadSearch;
 import static com.example.movies.activity.MainActivity.movieResources;
-
 import android.annotation.SuppressLint;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import static com.example.movies.activity.DetailsMovieActivity.hadSearch;
 import androidx.annotation.NonNull;
-import androidx.databinding.Bindable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.movies.api.APIGetData;
-import com.example.movies.databinding.LayoutItemFilmBinding;
-import com.example.movies.model.MovieObject;
-import com.example.movies.listener.IMovieItemClickListener;
 import com.example.movies.R;
+import com.example.movies.databinding.LayoutItemFilmBinding;
+import com.example.movies.listener.IMovieItemClickListener;
+import com.example.movies.model.MovieObject;
 import com.example.movies.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MoviesAdapterByGenres extends RecyclerView.Adapter<MoviesAdapterByGenres.ViewHolder> implements Filterable {
 
@@ -41,7 +31,7 @@ public class MoviesAdapterByGenres extends RecyclerView.Adapter<MoviesAdapterByG
     public  String title="";
     public List<MovieObject.Movie> movieList;
     public List<MovieObject.Movie> oldMovieList;
-    private IMovieItemClickListener singleItemClicked;
+    private final IMovieItemClickListener singleItemClicked;
 
 
     //CONSTRUCTOR
@@ -68,20 +58,10 @@ public class MoviesAdapterByGenres extends RecyclerView.Adapter<MoviesAdapterByG
             Log.i("AAA","NOT FIND MOVIESSSSSSSSSSSSSSSSs");
             page++;
             if(type.equals(Utils.latest) || type.equals(Utils.now_playing) || type.equals(Utils.popular) || type.equals(Utils.top_rated) || type.equals(Utils.upcoming)){
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        movieResources.getMoviesAPIAtPageIndex(type,page);
-                    }
-                }).start();
+                new Thread(() -> movieResources.getMoviesAPIAtPageIndex(type,page)).start();
             }
             else{
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        movieResources.getAllMoviesByGenre(type, String.valueOf(page));
-                    }
-                }).start();
+                new Thread(() -> movieResources.getAllMoviesByGenre(type, String.valueOf(page))).start();
             }
         }
     }
@@ -91,12 +71,6 @@ public class MoviesAdapterByGenres extends RecyclerView.Adapter<MoviesAdapterByG
         return movieList.size();
     }
 
-    //SET LIST MOVIE
-    @SuppressLint("NotifyDataSetChanged")
-    public void setMovieItemList(List<MovieObject.Movie> items){
-        this.movieList = items;
-        notifyDataSetChanged();
-    }
 
     public String getType() {
         return type;
@@ -118,9 +92,6 @@ public class MoviesAdapterByGenres extends RecyclerView.Adapter<MoviesAdapterByG
         return movieList;
     }
 
-    public void setMovieList(List<MovieObject.Movie> movieList) {
-        this.movieList = movieList;
-    }
 
     public void addMovieList(List<MovieObject.Movie> movieList){
         this.movieList.addAll(movieList);
@@ -132,18 +103,6 @@ public class MoviesAdapterByGenres extends RecyclerView.Adapter<MoviesAdapterByG
         notifyDataSetChanged();
     }
 
-
-
-
-    //SET MOVIE
-    public void setMovieItem(MovieObject.Movie item){
-        for (int i = 0; i < movieList.size(); i++) {
-            if(movieList.get(i).getId().equals(item.getId())){
-                movieList.set(i,item);
-                break;
-            }
-        }
-    }
 
     @Override
     public Filter getFilter() {
@@ -213,15 +172,4 @@ public class MoviesAdapterByGenres extends RecyclerView.Adapter<MoviesAdapterByG
         }
     }
 
-    public List<MovieObject.Movie> filterMovieByGenresID(String genresID, List<MovieObject.Movie> moviesNeedFilterByGenresID){
-        List<MovieObject.Movie> afterFilterByGenresID = new ArrayList<>();
-        Log.i("AAA","GENRES ID : "+genresID);
-        for (MovieObject.Movie a : moviesNeedFilterByGenresID){
-            if(a.getGenres().contains(genresID)){
-                Log.i("AAA","MOVIE FILTER NAME : "+a.getTitle());
-                afterFilterByGenresID.add(a);
-            }
-        }
-        return afterFilterByGenresID;
-    }
 }

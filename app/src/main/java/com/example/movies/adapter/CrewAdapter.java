@@ -1,6 +1,5 @@
 package com.example.movies.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +9,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movies.R;
-import com.example.movies.databinding.ItemCastLayoutBinding;
 import com.example.movies.databinding.ItemCrewLayoutBinding;
 import com.example.movies.listener.ICrewItemClickListener;
-import com.example.movies.model.Cast;
 import com.example.movies.model.Crew;
 
 import java.util.ArrayList;

@@ -1,12 +1,7 @@
 package com.example.movies.activity;
-
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-
 import com.example.movies.R;
 import com.example.movies.databinding.ActivityWatchTrailerBinding;
 import com.example.movies.model.TrailerObject;

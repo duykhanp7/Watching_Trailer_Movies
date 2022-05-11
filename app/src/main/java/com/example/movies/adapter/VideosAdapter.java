@@ -1,21 +1,14 @@
 package com.example.movies.adapter;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movies.R;
-import com.example.movies.activity.WatchTrailerActivity;
 import com.example.movies.databinding.ItemYoutubeViewBinding;
 import com.example.movies.listener.ITrailerItemClickListener;
 import com.example.movies.model.TrailerObject;

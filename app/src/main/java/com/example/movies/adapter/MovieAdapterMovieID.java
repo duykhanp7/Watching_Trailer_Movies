@@ -28,7 +28,6 @@ public class MovieAdapterMovieID extends RecyclerView.Adapter<MovieAdapterMovieI
     MovieObject.Movie movieOriginal;
     IRecommendationsClickListener iRecommendationsClickListener;
     int page = 1;
-    int page_total = 1;
     String type;
 
     public MovieAdapterMovieID(MovieObject.Movie movie, IRecommendationsClickListener iRecommendationsClickListener, String type){
@@ -55,12 +54,7 @@ public class MovieAdapterMovieID extends RecyclerView.Adapter<MovieAdapterMovieI
         holder.binding.setItemFilm(movie);
         holder.setMovie(movie);
         if(position == moviesList.size() - 3){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    fetchMovies(movieOriginal.getId());
-                }
-            }).start();
+            new Thread(() -> fetchMovies(movieOriginal.getId())).start();
         }
     }
 
@@ -71,7 +65,7 @@ public class MovieAdapterMovieID extends RecyclerView.Adapter<MovieAdapterMovieI
                 assert response.body() != null;
 
                 assert response.body() != null;
-                int size = moviesList.size();;
+                int size = moviesList.size();
                 List<MovieObject.Movie> movies = response.body().getMoviesList();
                 moviesList.addAll(movies);
                 notifyItemRangeInserted(size, moviesList.size());

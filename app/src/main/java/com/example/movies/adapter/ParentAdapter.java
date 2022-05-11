@@ -223,12 +223,7 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.ViewHolder
         for (int i = 0; i < bindings.size(); i++) {
             int finalI = i;
             String title = Utils.titleGenres.get(finalI);
-            bindings.get(i).titleGenre.post(new Runnable() {
-                @Override
-                public void run() {
-                    bindings.get(finalI).titleGenre.setText(title);
-                }
-            });
+            bindings.get(i).titleGenre.post(() -> bindings.get(finalI).titleGenre.setText(title));
         }
     }
 

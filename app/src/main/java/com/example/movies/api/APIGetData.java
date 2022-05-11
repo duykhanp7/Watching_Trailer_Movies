@@ -1,12 +1,10 @@
 package com.example.movies.api;
 
-import android.view.ViewDebug;
-
 import com.example.movies.model.Cast;
 import com.example.movies.model.Crew;
+import com.example.movies.model.GenreObject;
 import com.example.movies.model.Language;
 import com.example.movies.model.MovieObject;
-import com.example.movies.model.GenreObject;
 import com.example.movies.model.TrailerObject;
 
 import java.util.List;

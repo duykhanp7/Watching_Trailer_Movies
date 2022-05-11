@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movies.R;
-import com.example.movies.databinding.LayoutItemFilmBinding;
 import com.example.movies.databinding.LayoutItemFilmDetailsBinding;
 import com.example.movies.listener.IMovieItemByCastCrewIDClickListener;
 import com.example.movies.model.MovieObject;

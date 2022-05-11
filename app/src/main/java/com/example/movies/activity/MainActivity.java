@@ -51,20 +51,10 @@ public class MainActivity extends AppCompatActivity implements IMovieItemClickLi
     public ObservableField<Boolean> isSearchMovie = new ObservableField<>(false);
     public ObservableField<Boolean> hasSearched = new ObservableField<>(false);
     public ObservableField<SearchMovieAdapter> searchMovieAdapterObservableField = new ObservableField<>(new SearchMovieAdapter(this));
+    //SAU KHI NHẬN DỮ LIỆU THÌ GỬI SANG ALARMADAPTER ĐỂ CẬP NHẬT DỮ LIỆU
     //ACTIVITY RESULT : GET DATA LIST TRAILER RETURN
     public final ActivityResultLauncher<Intent> mResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                //SAU KHI NHẬN DỮ LIỆU THÌ GỬI SANG ALARMADAPTER ĐỂ CẬP NHẬT DỮ LIỆU
-                @Override
-                public void onActivityResult(ActivityResult result) {
-//                    if(result.getResultCode() == RESULT_OK){
-//                        Intent intent = result.getData();
-//                        assert intent != null;
-//                        MovieObject.Movie item = (MovieObject.Movie) intent.getSerializableExtra("item");
-//                        String type = intent.getStringExtra("type");
-//                        Objects.requireNonNull(parentAdapterObservableField.get()).setValuesUpdateMovies(type,item);
-//                    }
-                }
+            new ActivityResultContracts.StartActivityForResult(), result -> {
             });
 
     @Override
@@ -175,30 +165,10 @@ public class MainActivity extends AppCompatActivity implements IMovieItemClickLi
         Thread a,b,c,d,e;
 
 
-        b = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                movieResources.getMoviesAPIAtPageIndex(Utils.now_playing,1);
-            }
-        });
-        c = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                movieResources.getMoviesAPIAtPageIndex(Utils.popular,1);
-            }
-        });
-        d = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                movieResources.getMoviesAPIAtPageIndex(Utils.top_rated,1);
-            }
-        });
-        e = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                movieResources.getMoviesAPIAtPageIndex(Utils.upcoming,1);
-            }
-        });
+        b = new Thread(() -> movieResources.getMoviesAPIAtPageIndex(Utils.now_playing,1));
+        c = new Thread(() -> movieResources.getMoviesAPIAtPageIndex(Utils.popular,1));
+        d = new Thread(() -> movieResources.getMoviesAPIAtPageIndex(Utils.top_rated,1));
+        e = new Thread(() -> movieResources.getMoviesAPIAtPageIndex(Utils.upcoming,1));
 
         b.start();c.start();d.start();e.start();
         //BINDING
@@ -264,175 +234,140 @@ public class MainActivity extends AppCompatActivity implements IMovieItemClickLi
         switch (type){
             case Utils.now_playing:
                 adapterManager.nowPlayingMoviesAdapterByGenres.addMovieList(movies);
-                //adapterManager.NowPlayingMoviesAdapter = new MoviesAdapter(Utils.now_playing,movies,this);
                 adapterManager.NowPlayingMoviesAdapterObservableField.set(adapterManager.nowPlayingMoviesAdapterByGenres);
-                //Objects.requireNonNull(parentAdapterObservableField.get()).setValuesUpdate(Utils.now_playing,adapterManager.NowPlayingMoviesAdapter);
-                //parentAdapter.setValuesUpdate(Utils.now_playing,adapterManager.NowPlayingMoviesAdapter,state);
-                //parentAdapter.notifyItemChanged(0);
                 Objects.requireNonNull(parentAdapter.adapterManager.NowPlayingMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.popular:
                 size = adapterManager.popularMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.popularMoviesAdapterByGenres.addMovieList(movies);
-                //adapterManager.PopularMoviesAdapter = new MoviesAdapter(Utils.popular,movies,this);
                 adapterManager.PopularMoviesAdapterObservableField.set(adapterManager.popularMoviesAdapterByGenres);
-                //Objects.requireNonNull(parentAdapterObservableField.get()).setValuesUpdate(Utils.popular,adapterManager.PopularMoviesAdapter);
-                //parentAdapter.setValuesUpdate(Utils.popular,adapterManager.PopularMoviesAdapter,state);
-                //parentAdapter.notifyItemChanged(1);
                 Objects.requireNonNull(parentAdapter.adapterManager.PopularMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.top_rated:
                 size = adapterManager.topRateMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.topRateMoviesAdapterByGenres.addMovieList(movies);
-                //adapterManager.TopRateMoviesAdapter = new MoviesAdapter(Utils.top_rated,movies,this);
                 adapterManager.TopRateMoviesAdapterObservableField.set(adapterManager.topRateMoviesAdapterByGenres);
-                //Objects.requireNonNull(parentAdapterObservableField.get()).setValuesUpdate(Utils.top_rated,adapterManager.TopRateMoviesAdapter);
-                //parentAdapter.setValuesUpdate(Utils.top_rated,adapterManager.TopRateMoviesAdapter,state);
-                //parentAdapter.notifyItemChanged(2);
                 Objects.requireNonNull(parentAdapter.adapterManager.TopRateMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
 
                 break;
             case Utils.upcoming:
-                //adapterManager.UpComingMoviesAdapter = new MoviesAdapter(Utils.upcoming,movies,this);
                 size = adapterManager.upComingMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.upComingMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.UpComingMoviesAdapterObservableField.set(adapterManager.upComingMoviesAdapterByGenres);
-                //Objects.requireNonNull(parentAdapterObservableField.get()).setValuesUpdate(Utils.upcoming,adapterManager.UpComingMoviesAdapter);
-                //parentAdapter.setValuesUpdate(Utils.upcoming,adapterManager.UpComingMoviesAdapter,state);
-                //parentAdapter.notifyItemChanged(3);
                 Objects.requireNonNull(parentAdapter.adapterManager.UpComingMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.ActionMovies:
                 size = adapterManager.actionMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.actionMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.ActionMoviesAdapterObservableField.set(adapterManager.actionMoviesAdapterByGenres);
-                //parentAdapter.notifyItemChanged(4);
                 Objects.requireNonNull(parentAdapter.adapterManager.ActionMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.AdventureMovies:
                 size = adapterManager.adventureMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.adventureMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.AdventureMoviesAdapterObservableField.set(adapterManager.adventureMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(5);
                 Objects.requireNonNull(parentAdapter.adapterManager.AdventureMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.AnimationMovies:
                 size = adapterManager.animationMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.animationMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.AnimationMoviesAdapterObservableField.set(adapterManager.animationMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(6);
                 Objects.requireNonNull(parentAdapter.adapterManager.AnimationMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.ComedyMovies:
                 size = adapterManager.comedyMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.comedyMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.ComedyMoviesAdapterObservableField.set(adapterManager.comedyMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(7);
                 Objects.requireNonNull(parentAdapter.adapterManager.ComedyMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.CrimeMovies:
                 size = adapterManager.crimeMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.crimeMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.CrimeMoviesAdapterObservableField.set(adapterManager.crimeMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(8);
                 Objects.requireNonNull(parentAdapter.adapterManager.CrimeMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.DocumentaryMovies:
                 size = adapterManager.documentaryMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.documentaryMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.DocumentaryMoviesAdapterObservableField.set(adapterManager.documentaryMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(9);
                 Objects.requireNonNull(parentAdapter.adapterManager.DocumentaryMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.DramaMovies:
                 size = adapterManager.dramaMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.dramaMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.DramaMoviesAdapterObservableField.set(adapterManager.dramaMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(10);
                 Objects.requireNonNull(parentAdapter.adapterManager.DramaMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.FamilyMovies:
                 size = adapterManager.familyMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.familyMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.FamilyMoviesAdapterObservableField.set(adapterManager.familyMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(11);
                 Objects.requireNonNull(parentAdapter.adapterManager.FamilyMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.FantasyMovies:
                 size = adapterManager.fantasyMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.fantasyMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.FantasyMoviesAdapterObservableField.set(adapterManager.fantasyMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(12);
                 Objects.requireNonNull(parentAdapter.adapterManager.FantasyMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.HistoryMovies:
                 size = adapterManager.historyMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.historyMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.HistoryMoviesAdapterObservableField.set(adapterManager.historyMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(13);
                 Objects.requireNonNull(parentAdapter.adapterManager.HistoryMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.HorrorMovies:
                 size = adapterManager.horrorMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.horrorMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.HorrorMoviesAdapterObservableField.set(adapterManager.horrorMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(14);
                 Objects.requireNonNull(parentAdapter.adapterManager.HorrorMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.MusicMovies:
                 size = adapterManager.musicMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.musicMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.MusicMoviesAdapterObservableField.set(adapterManager.musicMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(15);
                 Objects.requireNonNull(parentAdapter.adapterManager.MusicMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.MysteryMovies:
                 size = adapterManager.mysteryMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.mysteryMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.MysteryMoviesAdapterObservableField.set(adapterManager.mysteryMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(16);
                 Objects.requireNonNull(parentAdapter.adapterManager.MysteryMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.RomanceMovies:
                 size = adapterManager.romanceMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.romanceMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.RomanceMoviesAdapterObservableField.set(adapterManager.romanceMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(17);
                 Objects.requireNonNull(parentAdapter.adapterManager.RomanceMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.ScienceFictionMovies:
                 size = adapterManager.scienceFictionMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.scienceFictionMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.ScienceFictionMoviesAdapterObservableField.set(adapterManager.scienceFictionMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(18);
                 Objects.requireNonNull(parentAdapter.adapterManager.ScienceFictionMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.TVMovie:
                 size = adapterManager.TVMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.TVMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.TVMoviesAdapterObservableField.set(adapterManager.TVMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(19);
                 Objects.requireNonNull(parentAdapter.adapterManager.TVMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.ThrillerMovies:
                 size = adapterManager.thrillerMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.thrillerMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.ThrillerMoviesAdapterObservableField.set(adapterManager.thrillerMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(20);
                 Objects.requireNonNull(parentAdapter.adapterManager.ThrillerMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.WarMovies:
                 size = adapterManager.warMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.warMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.WarMoviesObservableField.set(adapterManager.warMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(21);
                 Objects.requireNonNull(parentAdapter.adapterManager.WarMoviesObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             case Utils.WesternMovies:
                 size = adapterManager.westernMoviesAdapterByGenres.getMovieList().size();
                 adapterManager.westernMoviesAdapterByGenres.addMovieList(movies);
                 adapterManager.WesternMoviesAdapterObservableField.set(adapterManager.westernMoviesAdapterByGenres);
-//                parentAdapter.notifyItemChanged(22);
                 Objects.requireNonNull(parentAdapter.adapterManager.WesternMoviesAdapterObservableField.get()).notifyItemRangeInserted(size,movies.size());
                 break;
             default:

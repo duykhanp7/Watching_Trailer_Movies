@@ -119,42 +119,31 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
         binding = DataBindingUtil.setContentView(this,R.layout.activity_movie_details);
         binding.setMain(this);
         renderUIDetails();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                binding.favoritesButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.favorites_ic_normal));
+        runOnUiThread(() -> binding.favoritesButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.favorites_ic_normal)));
+
+        binding.nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if(!v.canScrollVertically(-1)){
+                binding.buttonScrollToTop.setVisibility(View.GONE);
+                Animation animationGone = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_hide);
+                binding.buttonScrollToTop.startAnimation(animationGone);
+            }
+            else{
+                Animation animationShow = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_show);
+                binding.buttonScrollToTop.startAnimation(animationShow);
+                binding.buttonScrollToTop.setVisibility(View.VISIBLE);
             }
         });
 
-        binding.nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if(!v.canScrollVertically(-1)){
-                    binding.buttonScrollToTop.setVisibility(View.GONE);
-                    Animation animationGone = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_hide);
-                    binding.buttonScrollToTop.startAnimation(animationGone);
-                }
-                else{
-                    Animation animationShow = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_show);
-                    binding.buttonScrollToTop.startAnimation(animationShow);
-                    binding.buttonScrollToTop.setVisibility(View.VISIBLE);
-                }
+        binding.recyclerViewByChipGenre.setOnScrollChangeListener((view, i, i1, i2, i3) -> {
+            if(!view.canScrollVertically(-1)){
+                binding.buttonScrollToTop.setVisibility(View.GONE);
+                Animation animationGone = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_hide);
+                binding.buttonScrollToTop.startAnimation(animationGone);
             }
-        });
-
-        binding.recyclerViewByChipGenre.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                if(!view.canScrollVertically(-1)){
-                    binding.buttonScrollToTop.setVisibility(View.GONE);
-                    Animation animationGone = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_hide);
-                    binding.buttonScrollToTop.startAnimation(animationGone);
-                }
-                else{
-                    Animation animationShow = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_show);
-                    binding.buttonScrollToTop.startAnimation(animationShow);
-                    binding.buttonScrollToTop.setVisibility(View.VISIBLE);
-                }
+            else{
+                Animation animationShow = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_show);
+                binding.buttonScrollToTop.startAnimation(animationShow);
+                binding.buttonScrollToTop.setVisibility(View.VISIBLE);
             }
         });
 
@@ -184,9 +173,7 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
         buttonFavoritesClicked = false;
         expandableDetailsCastAndCrew = false;
         expandableDetailsCastAndCrewObservable.set(expandableDetailsCastAndCrew);
-        //Log.i("AAA","TYPE GETTTTTTTTTTTTTT : "+type);
         if(item.getTrailers().getTrailersList().size() == 0){
-            Log.i("AAA","NULLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL FIRST CLICKED");
             stateEmptyWhenFirstClicked = true;
             APIGetData.apiGetData.getDetailsMovieInformation(item.getId()).enqueue(new Callback<MovieObject.Movie>() {
                 @SuppressLint("NotifyDataSetChanged")
@@ -216,14 +203,12 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
 
                 @Override
                 public void onFailure(@NonNull Call<MovieObject.Movie> call, @NonNull Throwable t) {
-                    Log.i("AAA","FAILEDDDDDDDDDDDDDDDDDDDDD GET API");
                 }
             });
 
         }
         //ELSE DO THIS IF TRAILERS IS NOT NULL
         else{
-            Log.i("AAA","NOT NULLLLLLLLLLLLLLLLL FIRST CLICKED");
             stateEmptyWhenFirstClicked = false;// IF NOT NULL TICK IT TO FALSE
             castAdapter.setCasts(Objects.requireNonNull(item).getStaff().getCasts());
             crewAdapter.setCrews(Objects.requireNonNull(item).getStaff().getCrews());
@@ -252,21 +237,12 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
         //startWatching();
     }
 
-    //SET DATA RETURN
-    public void setResultReturn(){
-//        Intent intent = new Intent(DetailsMovieActivity.this, MainActivity.class);
-//        intent.putExtra("item",item);
-//        intent.putExtra("type",type);
-//        setResult(RESULT_OK, intent);
-    }
-
 
     //ON BACK PRESSED EVENT
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     public void onBackPressed() {
         if(movieByChipGenres.get()){
-            Log.i("AAA","AAAAAAAAAAAAAAAAA");
             if(hadSearch){
                 Objects.requireNonNull(moviesAdapterByGenresObservableFieldDetails.get()).setMovieListWithOldMovieList();
             }
@@ -280,7 +256,6 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
         else{
             hadSearch = false;
             buttonSearchClicked.set(false);
-            Log.i("AAA","BBBBBBBBBBBBBBBBBBBB");
             super.onBackPressed();
         }
     }
@@ -290,44 +265,35 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
         item = movie;
         renderUIDetails();
         movieObservableField.set(item);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                binding.nestedScrollView.fullScroll(ScrollView.FOCUS_UP);
-                binding.nestedScrollView.smoothScrollTo(0,0);
-                binding.recyclerViewCast.smoothScrollToPosition(0);
-                binding.recyclerViewRecommendations.smoothScrollToPosition(0);
-                binding.recyclerViewSimilar.smoothScrollToPosition(0);
-            }
+        runOnUiThread(() -> {
+            binding.nestedScrollView.fullScroll(ScrollView.FOCUS_UP);
+            binding.nestedScrollView.smoothScrollTo(0,0);
+            binding.recyclerViewCast.smoothScrollToPosition(0);
+            binding.recyclerViewRecommendations.smoothScrollToPosition(0);
+            binding.recyclerViewSimilar.smoothScrollToPosition(0);
         });
     }
 
 
     //BUTTON ADD TO FAVORITES
     public void onButtonAddToFavorites(View view, MovieObject.Movie movie){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(!buttonFavoritesClicked){
-                    binding.favoritesButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.favorites_ic_clicked));
-                }
-                else{
-                    binding.favoritesButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.favorites_ic_normal));
-                }
-                buttonFavoritesClicked = !buttonFavoritesClicked;
+        runOnUiThread(() -> {
+            if(!buttonFavoritesClicked){
+                binding.favoritesButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.favorites_ic_clicked));
             }
+            else{
+                binding.favoritesButton.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.favorites_ic_normal));
+            }
+            buttonFavoritesClicked = !buttonFavoritesClicked;
         });
     }
 
 
     //BUTTON SHOW DETAILS CAST AND CREW
     public void onButtonShowDetailsCastAndCrew(View view){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                expandableDetailsCastAndCrew = !expandableDetailsCastAndCrew;
-                expandableDetailsCastAndCrewObservable.set(expandableDetailsCastAndCrew);
-            }
+        new Thread(() -> {
+            expandableDetailsCastAndCrew = !expandableDetailsCastAndCrew;
+            expandableDetailsCastAndCrewObservable.set(expandableDetailsCastAndCrew);
         }).start();
     }
 
@@ -348,7 +314,7 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
     public void onTrailerItemClick(TrailerObject.Trailer trailer) {
         Intent intentWatchTrailer = new Intent(DetailsMovieActivity.this,WatchTrailerActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("trailer",trailer);;
+        bundle.putSerializable("trailer",trailer);
         intentWatchTrailer.putExtra("bundle",bundle);
         startActivity(intentWatchTrailer);
     }
@@ -367,28 +333,23 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
     }
 
     public void onCastItemClickFunction(Cast cast){
-        new Thread(new Runnable() {
+        new Thread(() -> APIGetData.apiGetData.getCastDetails(cast.getId()).enqueue(new Callback<Cast>() {
             @Override
-            public void run() {
-                APIGetData.apiGetData.getCastDetails(cast.getId()).enqueue(new Callback<Cast>() {
-                    @Override
-                    public void onResponse(@NonNull Call<Cast> call, @NonNull Response<Cast> response) {
-                        Cast castDetails = response.body();
-                        String type = Utils.TYPE_CAST;
-                        Intent intentCastClick = new Intent(DetailsMovieActivity.this,DetailsCharacterActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("type",type);
-                        bundle.putSerializable("cast",castDetails);
-                        intentCastClick.putExtra("bundle",bundle);
-                        startActivity(intentCastClick);
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<Cast> call, @NonNull Throwable t) {
-                    }
-                });
+            public void onResponse(@NonNull Call<Cast> call, @NonNull Response<Cast> response) {
+                Cast castDetails = response.body();
+                String type = Utils.TYPE_CAST;
+                Intent intentCastClick = new Intent(DetailsMovieActivity.this,DetailsCharacterActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("type",type);
+                bundle.putSerializable("cast",castDetails);
+                intentCastClick.putExtra("bundle",bundle);
+                startActivity(intentCastClick);
             }
-        }).start();
+
+            @Override
+            public void onFailure(@NonNull Call<Cast> call, @NonNull Throwable t) {
+            }
+        })).start();
     }
 
 
@@ -399,29 +360,24 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
     }
 
     public void onCrewItemClickFunction(Crew crew){
-        new Thread(new Runnable() {
+        new Thread(() -> APIGetData.apiGetData.getCrewDetails(crew.getId()).enqueue(new Callback<Crew>() {
             @Override
-            public void run() {
-                APIGetData.apiGetData.getCrewDetails(crew.getId()).enqueue(new Callback<Crew>() {
-                    @Override
-                    public void onResponse(@NonNull Call<Crew> call, @NonNull Response<Crew> response) {
-                        Crew crewDetails = response.body();
-                        String type = Utils.TYPE_CREW;
-                        Intent intentCastClick = new Intent(DetailsMovieActivity.this,DetailsCharacterActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("type",type);
-                        bundle.putSerializable("crew",crewDetails);
-                        intentCastClick.putExtra("bundle",bundle);
-                        startActivity(intentCastClick);
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<Crew> call, @NonNull Throwable t) {
-
-                    }
-                });
+            public void onResponse(@NonNull Call<Crew> call, @NonNull Response<Crew> response) {
+                Crew crewDetails = response.body();
+                String type = Utils.TYPE_CREW;
+                Intent intentCastClick = new Intent(DetailsMovieActivity.this,DetailsCharacterActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("type",type);
+                bundle.putSerializable("crew",crewDetails);
+                intentCastClick.putExtra("bundle",bundle);
+                startActivity(intentCastClick);
             }
-        }).start();
+
+            @Override
+            public void onFailure(@NonNull Call<Crew> call, @NonNull Throwable t) {
+
+            }
+        })).start();
     }
 
 
@@ -435,13 +391,6 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
 
     //ON BUTTON SEARCH CLICKED
     public void onButtonSearchClicked(){
-        Log.i("AAA","ON BUTTON SEARCH CLICKED");
         buttonSearchClicked.set(true);
     }
-
-
-    //PROBLEMS
-    //ĐANG Ở GIAO DIỆN CHI TIẾT PHIM NHƯNG MÀ KHI NHẤN VÀO CÁC ITEM CỦA RECYCLER THÌ CHUYỂN SANG PAGE KHÁC
-    //CHỈNH LẠI NẾU ĐANG Ở PAGE CHI TIẾT PHIM THÌ NHẤN VÀO ITEM THÌ VẪN GIỮ ACTIVITY
-    //VÀ REFRESH LẠI LAYOUT
 }

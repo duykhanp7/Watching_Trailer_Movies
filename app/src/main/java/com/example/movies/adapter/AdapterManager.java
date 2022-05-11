@@ -10,10 +10,6 @@ import java.util.Objects;
 
 public class AdapterManager{
 
-    //LATEST
-//    public ObservableField<MoviesAdapter> LatestMoviesAdapterObservableField = new ObservableField<>();
-//    public MoviesAdapter LatestMoviesAdapter;
-
     //NOW PLAYING
     public ObservableField<MoviesAdapterByGenres> NowPlayingMoviesAdapterObservableField = new ObservableField<>();
     public MoviesAdapterByGenres nowPlayingMoviesAdapterByGenres;
@@ -166,123 +162,120 @@ public class AdapterManager{
 
 
     public void updateMovieInAllGenres(MovieObject.Movie item){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (MovieObject.Movie a : Objects.requireNonNull(NowPlayingMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().trim().equals(item.getId().trim())){
-                        a.setMovie(item);break;
-                    }
+        new Thread(() -> {
+            for (MovieObject.Movie a : Objects.requireNonNull(NowPlayingMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().trim().equals(item.getId().trim())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(PopularMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(PopularMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(TopRateMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(TopRateMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(UpComingMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(UpComingMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(ActionMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(ActionMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(AdventureMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(AdventureMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(AnimationMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(AnimationMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(ComedyMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(ComedyMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(CrimeMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(CrimeMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(DocumentaryMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(DocumentaryMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(DramaMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(DramaMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(FamilyMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(FamilyMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(FantasyMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(FantasyMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(HistoryMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(HistoryMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(HorrorMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(HorrorMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(MusicMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(MusicMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(MysteryMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(MysteryMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(RomanceMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(RomanceMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(ScienceFictionMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(ScienceFictionMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(TVMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(TVMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(ThrillerMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(ThrillerMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(WarMoviesObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(WarMoviesObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
-                for (MovieObject.Movie a : Objects.requireNonNull(WesternMoviesAdapterObservableField.get()).getMovieList()){
-                    if(a.getId().equals(item.getId())){
-                        a.setMovie(item);break;
-                    }
+            }
+            for (MovieObject.Movie a : Objects.requireNonNull(WesternMoviesAdapterObservableField.get()).getMovieList()){
+                if(a.getId().equals(item.getId())){
+                    a.setMovie(item);break;
                 }
             }
         }).start();
