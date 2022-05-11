@@ -8,6 +8,7 @@
         <variable
             name="main"
             type="com.example.movies.activity.MainActivity" />
+        <import type="android.view.View"/>
     </data>
 
 
@@ -17,6 +18,7 @@
         tools:context=".activity.MainActivity"
         android:background="@color/black">
 
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -24,22 +26,87 @@
             android:overScrollMode="never"
             android:id="@+id/scrollView">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewListMovies"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="horizontal"
-                    android:paddingTop="30dp"
-                    android:paddingBottom="50dp"
-                    bind:setAdapter="@{main.parentAdapter}" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
 
-            </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <androidx.appcompat.widget.SearchView
+                            android:id="@+id/searchView"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="25dp"
+                            android:layout_marginStart="100dp"
+                            android:layout_marginEnd="20dp"
+                            android:background="@drawable/background_corner_search_view"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:focusedByDefault="true"
+                            app:iconifiedByDefault="false"
+                            app:searchIcon="@null"
+                            app:queryHint="Search Movies"
+                            android:visibility="@{main.isSearchMovie ? View.VISIBLE:View.GONE}">
+                            <requestFocus />
+                        </androidx.appcompat.widget.SearchView>
+
+
+                        <ImageView
+                            android:layout_marginTop="20dp"
+                            android:paddingEnd="5dp"
+                            android:layout_width="40dp"
+                            android:layout_height="30dp"
+                            android:id="@+id/iconSearchMovie"
+                            android:src="@drawable/ic_search"
+                            android:layout_alignParentEnd="true"
+                            android:visibility="@{main.isSearchMovie ? View.GONE:View.VISIBLE}"
+                            android:onClick="@{()->main.onButtonSearchClickedMain()}"/>
+
+                    </RelativeLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/recyclerViewSearchMovie"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        searchMovieAdapter="@{main.searchMovieAdapterObservableField}"
+                        android:visibility="@{main.hasSearched ? View.VISIBLE:View.GONE}"/>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{main.hasSearched ? View.GONE:View.VISIBLE}">
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewListMovies"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:nestedScrollingEnabled="false"
+                        android:orientation="horizontal"
+                        android:paddingBottom="50dp"
+                        android:layout_marginTop="-20dp"
+                        bind:setAdapter="@{main.parentAdapter}" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
 
         </androidx.core.widget.NestedScrollView>
 

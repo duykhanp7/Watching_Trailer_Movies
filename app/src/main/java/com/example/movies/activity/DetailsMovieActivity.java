@@ -3,7 +3,7 @@ package com.example.movies.activity;
 import static com.example.movies.activity.MainActivity.parentAdapterObservableField;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NavUtils;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
@@ -14,17 +14,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.example.movies.adapter.CastAdapter;
 import com.example.movies.adapter.CastDetailsAdapter;
 import com.example.movies.adapter.CrewAdapter;
 import com.example.movies.adapter.CrewDetailsAdapter;
 import com.example.movies.adapter.MovieAdapterMovieID;
+import com.example.movies.adapter.MoviesAdapterByGenres;
 import com.example.movies.adapter.VideosAdapter;
 import com.example.movies.api.APIGetData;
 import com.example.movies.R;
@@ -53,6 +52,7 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
     boolean buttonFavoritesClicked = false;
     public Boolean expandableDetailsCastAndCrew;
     public ObservableField<Boolean> expandableDetailsCastAndCrewObservable;
+    public static boolean hadSearch = false;
     ActivityMovieDetailsBinding binding;
     //String type;
 
@@ -74,8 +74,15 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
     public ObservableField<MovieObject.Movie> oldMovieObservableField;
     public ObservableField<CastDetailsAdapter> castDetailsAdapterObservableField;
     public ObservableField<CrewDetailsAdapter> crewDetailsAdapterObservableField;
+    public static ObservableField<MoviesAdapterByGenres> moviesAdapterByGenresObservableFieldDetails;
+
+    public static ObservableField<Boolean> movieByChipGenres;
+    public static ObservableField<String> chipTextClicked;
+    public static ObservableField<Boolean> buttonSearchClicked;
 
 
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +91,6 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
         //type = bundle.getString("type");
         expandableDetailsCastAndCrew = false;
         expandableDetailsCastAndCrewObservable = new ObservableField<>(expandableDetailsCastAndCrew);
-
 
         castAdapter = new CastAdapter(this);
         crewAdapter = new CrewAdapter(this);
@@ -103,6 +109,12 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
         oldMovieObservableField = new ObservableField<>();
         castDetailsAdapterObservableField = new ObservableField<>(castDetailsAdapter);
         crewDetailsAdapterObservableField = new ObservableField<>(crewDetailsAdapter);
+        moviesAdapterByGenresObservableFieldDetails = new ObservableField<>();
+
+        //
+        movieByChipGenres = new ObservableField<>(false);
+        chipTextClicked = new ObservableField<>("Action");
+        buttonSearchClicked = new ObservableField<>(false);
 
         binding = DataBindingUtil.setContentView(this,R.layout.activity_movie_details);
         binding.setMain(this);
@@ -119,10 +131,44 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if(!v.canScrollVertically(-1)){
                     binding.buttonScrollToTop.setVisibility(View.GONE);
+                    Animation animationGone = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_hide);
+                    binding.buttonScrollToTop.startAnimation(animationGone);
                 }
                 else{
+                    Animation animationShow = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_show);
+                    binding.buttonScrollToTop.startAnimation(animationShow);
                     binding.buttonScrollToTop.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        binding.recyclerViewByChipGenre.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                if(!view.canScrollVertically(-1)){
+                    binding.buttonScrollToTop.setVisibility(View.GONE);
+                    Animation animationGone = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_hide);
+                    binding.buttonScrollToTop.startAnimation(animationGone);
+                }
+                else{
+                    Animation animationShow = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_show);
+                    binding.buttonScrollToTop.startAnimation(animationShow);
+                    binding.buttonScrollToTop.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Objects.requireNonNull(moviesAdapterByGenresObservableFieldDetails.get()).getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
 
@@ -198,6 +244,8 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
         }
     }
 
+
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -217,7 +265,24 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if(movieByChipGenres.get()){
+            Log.i("AAA","AAAAAAAAAAAAAAAAA");
+            if(hadSearch){
+                Objects.requireNonNull(moviesAdapterByGenresObservableFieldDetails.get()).setMovieListWithOldMovieList();
+            }
+            else{
+                binding.searchView.setQuery("",false);
+                movieByChipGenres.set(false);
+            }
+            hadSearch = false;
+            buttonSearchClicked.set(false);
+        }
+        else{
+            hadSearch = false;
+            buttonSearchClicked.set(false);
+            Log.i("AAA","BBBBBBBBBBBBBBBBBBBB");
+            super.onBackPressed();
+        }
     }
 
     //REFRESH LAYOUT WHEN CLICK ON ANOTHER MOVIE ITEM
@@ -268,7 +333,13 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
 
     //ON BUTTON BACK PRESSED
     public void onIconBackPressed(View view){
-        finish();
+//        if(movieByChipGenres.get()){
+//            movieByChipGenres.set(false);
+//        }
+//        else{
+//            finish();
+//        }
+        onBackPressed();
     }
 
     //ON ITEM TRAILER CLICK
@@ -357,21 +428,20 @@ public class DetailsMovieActivity extends YouTubeBaseActivity implements ITraile
     //ON BUTTON SCROLL TO TOP CLICKED
     public void onButtonScrollToTopClicked(){
         binding.nestedScrollView.smoothScrollTo(0,0);
+        if(binding.recyclerViewByChipGenre.getVisibility() == View.VISIBLE){
+            binding.recyclerViewByChipGenre.smoothScrollToPosition(0);
+        }
     }
 
-    //XÓA BỎ PHẦN ACTIVITY RESULT ĐI VÌ ĐÃ CẬP NHẬT PHIM MỖI KHI NHẤN VÀO NÊN KHÔNG CẦNG RETURN DATA ĐỂ UPDATE
-    //KHI NHẤN VÀ CHUYỂN SANG NHIỀU ACTIVITY THÌ KHI BACK PRESSED VỀ THÌ NÊN VỀ ĐÚNG PARENT ACTIVITY CỦA NÓ
-    //CHỨ KHÔNG QUAY VÊ TRONG BACKSTASK
+    //ON BUTTON SEARCH CLICKED
+    public void onButtonSearchClicked(){
+        Log.i("AAA","ON BUTTON SEARCH CLICKED");
+        buttonSearchClicked.set(true);
+    }
+
 
     //PROBLEMS
-    //UPDATE MỖI BỘ PHIM MỖI KHI LOAD XONG Ở ACTIVITY DETAILS
-    //UPDATE BỘ PHIM NÀY TRONG TOÀN BỘ CÁC LOẠI PHIM
-    //NÚT ON BACK PRESSED VÀ ICON BACK PRESSED THÌ CHỈ TRỞ VỀ KHÔNG CẦN SET DATA RETURN
-    //MỖI KHI Ở ACTIVITY DETAILS THÌ NẾU NHẤN VÀO CÁC BỘ PHIM SIMILAR HOẶC RECOMMENDATIONS
-    //THÌ SẼ UPDATE BỘ PHIM NÀY TRONG CÁC THỂ LOẠI PHIM
-    //VÀ UPDATE PHIM NÀY TRONG DANH SÁCH PHIM SIMILAR HOẶC RECOMMENDATIONS CỦA BỘ PHIM PARENT TRƯỚC ĐÓ CỦA NÓ
-    //TẠO THANH TÌM KIẾM
-    //NÚT SCROLL TO TOP KHI SCROLL XUỐNG PHÍA DƯỚI
-    //HIỂN THỊ DANH SÁCH CÁC PHIM THỂ THỂ LOẠI MỖI KHI NHẤN VÀO CHIP HIỂN THỊ THỂ LOẠI PHIM Ở ACTIVITY DETAILS
-
+    //ĐANG Ở GIAO DIỆN CHI TIẾT PHIM NHƯNG MÀ KHI NHẤN VÀO CÁC ITEM CỦA RECYCLER THÌ CHUYỂN SANG PAGE KHÁC
+    //CHỈNH LẠI NẾU ĐANG Ở PAGE CHI TIẾT PHIM THÌ NHẤN VÀO ITEM THÌ VẪN GIỮ ACTIVITY
+    //VÀ REFRESH LẠI LAYOUT
 }

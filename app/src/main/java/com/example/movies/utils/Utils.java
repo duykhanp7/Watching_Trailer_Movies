@@ -39,7 +39,7 @@ public class Utils {
     public static final String MysteryMovies = "Mystery";
     public static final String RomanceMovies = "Romance";
     public static final String ScienceFictionMovies = "Science Fiction";
-    public static final String TVMovie = "TV Movie";
+    public static final String  TVMovie = "TV Movie";
     public static final String ThrillerMovies = "Thriller";
     public static final String WarMovies = "War";
     public static final String WesternMovies = "Western";
@@ -75,4 +75,9 @@ public class Utils {
     public static final String FACEBOOK = "FACEBOOK";
     public static final String INSTAGRAM = "INSTAGRAM";
     public static final String TWITTER = "TWITTER";
+    //MODE VISIBILITY FOR GENRES MOVIE
+    public static boolean MOVIE_BY_CHIP_GENRES = false;
+    //SPECIFIC CHARACTERS
+    public static final String SPECIFIC_CHARACTERS = "[^a-zA-Z0-9]";
+    public static final String REGEX_DOUBLE_SPACE = "\\s{2,}";
 }

@@ -16,502 +16,625 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/black">
 
-        <androidx.core.widget.NestedScrollView
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/black"
-            android:id="@+id/nestedScrollView">
-
-
-            <LinearLayout
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingTop="10dp"
+            android:visibility="@{main.movieByChipGenres ? View.VISIBLE : View.GONE}">
+            <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:paddingEnd="15dp"
+                android:paddingStart="10dp"
+                android:background="@color/black"
+                android:id="@+id/toolbarLayout">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/black"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
 
                     <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="600dp"
-                        android:background="#D1D1D1"
-                        android:scaleType="centerCrop"
-                        android:visibility="visible"
-                        bind:imageURLMovie="@{main.movieObservableField}" />
-
-                    <ImageView
-                        android:id="@+id/back_icon"
+                        android:id="@+id/back_icon_second"
                         android:layout_width="40dp"
                         android:layout_height="30dp"
-                        android:layout_marginStart="20dp"
+                        android:paddingStart="10dp"
                         android:layout_marginTop="20dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
                         android:onClick="@{(view)->main.onIconBackPressed(view)}"
                         android:src="@drawable/ic_back" />
 
+                    <TextView
+                        android:id="@+id/textViewMovieGenre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="100dp"
+                        android:fontFamily="monospace"
+                        android:text="@{main.chipTextClicked}"
+                        android:textAlignment="center"
+                        android:textColor="#FF9800"
+                        android:textSize="23sp"
+                        android:textStyle="bold"
+                        android:visibility="@{main.buttonSearchClicked ? View.GONE : View.VISIBLE}"
+                        android:layout_marginTop="40dp"/>
+
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/searchView"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="60dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="50dp"
+                        android:background="@drawable/background_corner_search_view"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:focusedByDefault="true"
+                        android:visibility="@{main.buttonSearchClicked ? View.VISIBLE : View.GONE}"
+                        app:iconifiedByDefault="false"
+                        app:queryHint='@{"Search "+main.chipTextClicked+" Movies"}'
+                        app:searchIcon="@null">
+
+                        <requestFocus />
+                    </androidx.appcompat.widget.SearchView>
+
+
+                    <ImageView
+                        android:layout_marginTop="20dp"
+                        android:paddingEnd="5dp"
+                        android:layout_width="40dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/iconSearchMovie"
+                        android:src="@drawable/ic_search"
+                        android:layout_alignParentEnd="true"
+
+                        android:onClick="@{()->main.onButtonSearchClicked()}"/>
+
                 </RelativeLayout>
+
+
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black"
+                android:layout_marginTop="10dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:background="@color/black"
+                    android:id="@+id/recyclerViewByChipGenre"
+                    android:layout_width="match_parent"
+                    android:layout_height="1000dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="true"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="80dp"
+                    bind:typeMovie="@{main.chipTextClicked}"
+                    bind:stateChanged="@{main.movieByChipGenres}"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/black"
+            android:id="@+id/nestedScrollView"
+            android:visibility="@{main.movieByChipGenres ? View.GONE : View.VISIBLE}"
+            bind:stateChanged="@{main.movieByChipGenres}">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingStart="20dp"
-                    android:paddingTop="10dp"
-                    android:paddingEnd="10dp"
-                    android:layout_marginTop="-20dp"
-                    android:background="@drawable/background_corner_top">
-
+                    android:orientation="vertical">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent"
+                        android:background="@color/black"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableEnd="@drawable/ic_star_rate"
-                            android:fontFamily="monospace"
-                            android:gravity="start"
-                            android:text='@{main.movieObservableField.vote_average+"/10"}'
-                            android:textColor="#FF9800"
-                            android:textSize="20sp"
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="600dp"
                             android:layout_alignParentStart="true"
-                            android:layout_alignParentTop="true"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:layout_alignParentTop="true"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentTop="true">
+                            android:background="#D1D1D1"
+                            android:scaleType="centerCrop"
+                            android:visibility="@{main.movieByChipGenres ? View.GONE : View.VISIBLE}"
+                            bind:imageURLMovie="@{main.movieObservableField}" />
 
-                            <ImageView
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:src="@drawable/facebook_ic"
-                                android:layout_marginEnd="15dp"
-                                android:id="@+id/facebookIC"
-                                android:onClick="@{(view)->BindingUtils.onButtonSocialClick(view, main.movieObservableField.social.facebook_id,Utils.FACEBOOK)}"
-                                android:paddingTop="2dp"/>
+                        <ImageView
+                            android:id="@+id/back_icon"
+                            android:layout_width="40dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="30dp"
+                            android:onClick="@{(view)->main.onIconBackPressed(view)}"
+                            android:src="@drawable/ic_back" />
 
-                            <ImageView
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:src="@drawable/instagram_ic"
-                                android:layout_marginEnd="13dp"
-                                android:id="@+id/instagramIC"
-                                android:paddingTop="2dp"
-                                android:onClick="@{(view)->BindingUtils.onButtonSocialClick(view, main.movieObservableField.social.instagram_id,Utils.INSTAGRAM)}"/>
-
-                            <ImageView
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:src="@drawable/twitter_ic"
-                                android:layout_marginEnd="8dp"
-                                android:id="@+id/twitterIC"
-                                android:paddingTop="2dp"
-                                android:onClick="@{(view)->BindingUtils.onButtonSocialClick(view, main.movieObservableField.social.twitter_id,Utils.TWITTER)}"/>
-                            <ImageView
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:layout_marginEnd="10dp"
-                                android:onClick="@{(view)->main.onButtonAddToFavorites(view,main.movieObservableField)}"
-                                android:background="@drawable/favorites_ic_normal"
-                                android:id="@+id/favorites_button"/>
-
-                        </LinearLayout>
 
                     </RelativeLayout>
 
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="7dp"
-                        android:textColor="@color/white"
-                        android:textSize="25sp"
-                        android:fontFamily="monospace"
-                        android:text="@{main.movieObservableField.title}"/>
-
-                    <TextView
-                        android:paddingStart="15dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="7dp"
-                        directorName="@{main.movieObservableField}"
-                        android:textColor="#979797"
-                        android:fontFamily="monospace"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:paddingStart="15dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        languageYearRuntime="@{main.movieObservableField}"
-                        android:textColor="#979797"
-                        android:fontFamily="monospace"
-                        android:layout_marginTop="12dp"
-                        android:textSize="18sp"/>
-
-
-                    <GridLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:useDefaultMargins="true"
-                        android:columnCount="3"
-                        android:rowCount="3"
-                        android:layout_marginTop="15dp"
-                        android:id="@+id/gridLayoutGenres"
-                        addGenres="@{main.movieObservableField}">
-                        <com.google.android.material.chip.Chip
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@android:color/transparent"
-                            android:text="Science Fiction"
-                            android:textColor="#979797"
-                            app:chipStrokeColor="#979797"
-                            app:chipStrokeWidth="2dp"
-                            android:fontFamily="monospace"
-                            android:layout_column="0"
-                            android:layout_row="0"/>
-
-                        <com.google.android.material.chip.Chip
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@android:color/transparent"
-                            android:text="Science Fiction"
-                            android:textColor="#979797"
-                            app:chipStrokeColor="#979797"
-                            app:chipStrokeWidth="2dp"
-                            android:fontFamily="monospace"
-                            android:layout_column="1"
-                            android:layout_row="0"/>
-
-                        <com.google.android.material.chip.Chip
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@android:color/transparent"
-                            android:text="Science Fiction"
-                            android:textColor="#979797"
-                            app:chipStrokeColor="#979797"
-                            app:chipStrokeWidth="2dp"
-                            android:fontFamily="monospace"
-                            android:layout_column="2"
-                            android:layout_row="0"/>
-                    </GridLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="20dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="10dp"
-                    android:orientation="vertical"
-                    android:visibility="@{main.movieObservableField.overview  != null ? View.VISIBLE:View.GONE}">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Overview"
-                        android:fontFamily="monospace"
-                        android:textSize="20sp"
-                        android:textColor="#FF9800"/>
-
-                    <!--                <io.github.glailton.expandabletextview.ExpandableTextView-->
-                    <!--                    android:layout_width="match_parent"-->
-                    <!--                    android:layout_height="wrap_content"-->
-                    <!--                    expandableTextView:collapsedLines="4"-->
-                    <!--                    expandableTextView:animDuration="500"-->
-                    <!--                    expandableTextView:readMoreText="Read more"-->
-                    <!--                    expandableTextView:readLessText="Read less"-->
-                    <!--                    expandableTextView:textMode="line"-->
-                    <!--                    expandableTextView:isExpanded="false"-->
-                    <!--                    app:ellipsizeTextColor="#FF9800"-->
-                    <!--                    android:fontFamily="monospace"-->
-                    <!--                    app:isUnderlined="true"-->
-                    <!--                    android:textSize="16sp"-->
-                    <!--                    android:lineSpacingExtra="5dp"-->
-                    <!--                    app:anchorPoint="2"-->
-                    <!--                    android:text="@{main.movieObservableField.overview}" />-->
-
-                    <io.github.glailton.expandabletextview.ExpandableTextView
-                        android:paddingStart="15dp"
-                        android:id="@+id/expand_tv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        expandableTextView:collapsedLines="4"
-                        expandableTextView:animDuration="500"
-                        expandableTextView:readMoreText="More"
-                        expandableTextView:readLessText="Less"
-                        expandableTextView:textMode="line"
-                        expandableTextView:isExpanded="true"
-                        app:ellipsizeTextColor="#FF9800"
-                        android:lineSpacingExtra="5dp"
-                        android:textSize="18sp"
-                        android:text="@{main.movieObservableField.overview}"/>
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:paddingStart="20dp"
                         android:paddingTop="10dp"
-                        android:paddingEnd="30dp"
-                        android:visibility="@{main.movieObservableField.staff.casts  != null ? View.VISIBLE:View.GONE}">
-                        <TextView
+                        android:paddingEnd="10dp"
+                        android:layout_marginTop="-20dp"
+                        android:visibility="@{main.movieByChipGenres ? View.GONE : View.VISIBLE}"
+                        android:background="@drawable/background_corner_top">
+
+
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Cast"
-                            android:fontFamily="monospace"
-                            android:textSize="20sp"/>
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/recyclerViewCast"
-                            android:layout_marginTop="5dp"
-                            android:nestedScrollingEnabled="false"
-                            android:orientation="horizontal"
-                            adapterCast="@{main.castAdapterObservableField}"/>
-                    </LinearLayout>
+                            android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:layout_marginTop="20dp"
-                        android:paddingEnd="30dp"
-                        android:visibility="@{main.movieObservableField.staff.crews != null ? View.VISIBLE:View.GONE}">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Crew"
-                            android:fontFamily="monospace"
-                            android:textSize="20sp"/>
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/recyclerViewCrew"
-                            android:layout_marginTop="5dp"
-                            android:nestedScrollingEnabled="false"
-                            android:orientation="horizontal"
-                            adapterCrew="@{main.crewAdapterObservableField}"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/layoutVideos"
-                        android:orientation="vertical"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="30dp"
-                        android:layout_marginTop="15dp"
-                        android:visibility="@{main.movieObservableField.trailers.trailersList != null ? View.VISIBLE:View.GONE}">
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/recyclerViewTrailers"
-                            android:layout_marginTop="10dp"
-                            android:nestedScrollingEnabled="false"
-                            android:orientation="horizontal"
-                            adapterVideos="@{main.videosAdapterObservableField}"/>
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingStart="20dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="30dp"
-                        android:layout_marginTop="20dp"
-                        android:visibility="@{main.movieObservableField.similar != null ? View.VISIBLE:View.GONE}"
-                        >
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Similar"
-                            android:fontFamily="monospace"
-                            android:textSize="20sp"/>
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/recyclerViewSimilar"
-                            android:layout_marginTop="5dp"
-                            android:nestedScrollingEnabled="false"
-                            android:orientation="horizontal"
-                            adapterSimilar="@{main.similarAdapterObservableField}"/>
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="30dp"
-                        android:paddingTop="10dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:visibility="@{main.movieObservableField.recommendations != null ? View.VISIBLE:View.GONE}">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Recommendations"
-                            android:fontFamily="monospace"
-                            android:textSize="20sp" />
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/recyclerViewRecommendations"
-                            android:layout_marginTop="5dp"
-                            android:nestedScrollingEnabled="false"
-                            android:orientation="horizontal"
-                            adapterRecommendations="@{main.recommendationsAdapterObservableField}"/>
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="90dp"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="30dp"
-                        android:animateLayoutChanges="true"
-                        android:background="@color/black">
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingEnd="20dp"
-                            android:background="@color/black">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentTop="true"
+                                android:drawableEnd="@drawable/ic_star_rate"
+                                android:fontFamily="monospace"
+                                android:gravity="start"
+                                android:text='@{main.movieObservableField.vote_average+"/10"}'
+                                android:textColor="#FF9800"
+                                android:textSize="20sp" />
 
                             <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentTop="true">
+
+                                <ImageView
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:src="@drawable/facebook_ic"
+                                    android:layout_marginEnd="15dp"
+                                    android:id="@+id/facebookIC"
+                                    android:onClick="@{(view)->BindingUtils.onButtonSocialClick(view, main.movieObservableField.social.facebook_id,Utils.FACEBOOK)}"
+                                    android:paddingTop="2dp"/>
+
+                                <ImageView
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:src="@drawable/instagram_ic"
+                                    android:layout_marginEnd="13dp"
+                                    android:id="@+id/instagramIC"
+                                    android:paddingTop="2dp"
+                                    android:onClick="@{(view)->BindingUtils.onButtonSocialClick(view, main.movieObservableField.social.instagram_id,Utils.INSTAGRAM)}"/>
+
+                                <ImageView
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:src="@drawable/twitter_ic"
+                                    android:layout_marginEnd="8dp"
+                                    android:id="@+id/twitterIC"
+                                    android:paddingTop="2dp"
+                                    android:onClick="@{(view)->BindingUtils.onButtonSocialClick(view, main.movieObservableField.social.twitter_id,Utils.TWITTER)}"/>
+                                <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:onClick="@{(view)->main.onButtonAddToFavorites(view,main.movieObservableField)}"
+                                    android:background="@drawable/favorites_ic_normal"
+                                    android:id="@+id/favorites_button"/>
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="7dp"
+                            android:textColor="@color/white"
+                            android:textSize="25sp"
+                            android:fontFamily="monospace"
+                            android:text="@{main.movieObservableField.title}"/>
+
+                        <TextView
+                            android:paddingStart="15dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="7dp"
+                            directorName="@{main.movieObservableField}"
+                            android:textColor="#979797"
+                            android:fontFamily="monospace"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:paddingStart="15dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            languageYearRuntime="@{main.movieObservableField}"
+                            android:textColor="#979797"
+                            android:fontFamily="monospace"
+                            android:layout_marginTop="12dp"
+                            android:textSize="18sp"/>
+
+
+                        <GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:useDefaultMargins="true"
+                            android:columnCount="3"
+                            android:rowCount="3"
+                            android:layout_marginTop="15dp"
+                            android:id="@+id/gridLayoutGenres"
+                            addGenres="@{main.movieObservableField}">
+                            <com.google.android.material.chip.Chip
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="@android:color/transparent"
+                                android:text="Science Fiction"
+                                android:textColor="#979797"
+                                app:chipStrokeColor="#979797"
+                                app:chipStrokeWidth="2dp"
+                                android:fontFamily="monospace"
+                                android:layout_column="0"
+                                android:layout_row="0"/>
+
+                            <com.google.android.material.chip.Chip
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="@android:color/transparent"
+                                android:text="Science Fiction"
+                                android:textColor="#979797"
+                                app:chipStrokeColor="#979797"
+                                app:chipStrokeWidth="2dp"
+                                android:fontFamily="monospace"
+                                android:layout_column="1"
+                                android:layout_row="0"/>
+
+                            <com.google.android.material.chip.Chip
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="@android:color/transparent"
+                                android:text="Science Fiction"
+                                android:textColor="#979797"
+                                app:chipStrokeColor="#979797"
+                                app:chipStrokeWidth="2dp"
+                                android:fontFamily="monospace"
+                                android:layout_column="2"
+                                android:layout_row="0"/>
+                        </GridLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="20dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="10dp"
+                        android:orientation="vertical"
+                        android:visibility="@{ main.movieByChipGenres ? View.GONE:main.movieObservableField.overview  != null ? View.VISIBLE:View.GONE}">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Overview"
+                            android:fontFamily="monospace"
+                            android:textSize="20sp"
+                            android:textColor="#FF9800"/>
+
+                        <io.github.glailton.expandabletextview.ExpandableTextView
+                            android:paddingStart="15dp"
+                            android:id="@+id/expand_tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            expandableTextView:collapsedLines="4"
+                            expandableTextView:animDuration="500"
+                            expandableTextView:readMoreText="More"
+                            expandableTextView:readLessText="Less"
+                            expandableTextView:textMode="line"
+                            expandableTextView:isExpanded="true"
+                            app:ellipsizeTextColor="#FF9800"
+                            android:lineSpacingExtra="5dp"
+                            android:textSize="18sp"
+                            android:text="@{main.movieObservableField.overview}"/>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="@{main.movieByChipGenres ? View.GONE : View.VISIBLE}">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingStart="20dp"
+                            android:paddingTop="10dp"
+                            android:paddingEnd="30dp"
+                            android:visibility="@{main.movieObservableField.staff.casts  != null ? View.VISIBLE:View.GONE}">
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
+                                android:text="Cast"
+                                android:fontFamily="monospace"
+                                android:textSize="20sp"/>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/recyclerViewCast"
+                                android:layout_marginTop="5dp"
+                                android:nestedScrollingEnabled="false"
+                                android:orientation="horizontal"
+                                adapterCast="@{main.castAdapterObservableField}"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingStart="20dp"
+                            android:paddingTop="10dp"
+                            android:layout_marginTop="20dp"
+                            android:paddingEnd="30dp"
+                            android:visibility="@{main.movieObservableField.staff.crews != null ? View.VISIBLE:View.GONE}">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Crew"
+                                android:fontFamily="monospace"
+                                android:textSize="20sp"/>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/recyclerViewCrew"
+                                android:layout_marginTop="5dp"
+                                android:nestedScrollingEnabled="false"
+                                android:orientation="horizontal"
+                                adapterCrew="@{main.crewAdapterObservableField}"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/layoutVideos"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:paddingStart="20dp"
+                            android:paddingTop="10dp"
+                            android:paddingEnd="30dp"
+                            android:layout_marginTop="15dp"
+                            android:visibility="@{main.movieObservableField.trailers.trailersList != null ? View.VISIBLE:View.GONE}">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/recyclerViewTrailers"
+                                android:layout_marginTop="10dp"
+                                android:nestedScrollingEnabled="false"
+                                android:orientation="horizontal"
+                                adapterVideos="@{main.videosAdapterObservableField}"/>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingStart="20dp"
+                            android:paddingTop="10dp"
+                            android:paddingEnd="30dp"
+                            android:layout_marginTop="20dp"
+                            android:visibility="@{main.movieObservableField.similar != null ? View.VISIBLE:View.GONE}"
+                            >
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Similar"
+                                android:fontFamily="monospace"
+                                android:textSize="20sp"/>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/recyclerViewSimilar"
+                                android:layout_marginTop="5dp"
+                                android:nestedScrollingEnabled="false"
+                                android:orientation="horizontal"
+                                adapterSimilar="@{main.similarAdapterObservableField}"/>
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="30dp"
+                            android:paddingTop="10dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:visibility="@{main.movieObservableField.recommendations != null ? View.VISIBLE:View.GONE}">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Recommendations"
+                                android:fontFamily="monospace"
+                                android:textSize="20sp" />
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/recyclerViewRecommendations"
+                                android:layout_marginTop="5dp"
+                                android:nestedScrollingEnabled="false"
+                                android:orientation="horizontal"
+                                adapterRecommendations="@{main.recommendationsAdapterObservableField}"/>
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="90dp"
+                            android:paddingStart="20dp"
+                            android:animateLayoutChanges="true"
+                            android:background="@color/black"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
                                 android:background="@color/black">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:weightSum="3">
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:textColor="@color/white"
-                                        android:text="Characters"
-                                        android:fontFamily="monospace"
-                                        android:textSize="20sp"
-                                        android:textStyle="bold"
-                                        android:layout_weight="1.5"/>
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="40dp"
-                                        android:layout_weight="1.5"
-                                        android:textSize="20sp"
-                                        android:text="Details"
-                                        android:gravity="center"
-                                        android:layout_marginStart="20dp"
-                                        android:textColor="@color/white"
-                                        android:fontFamily="monospace"
-                                        android:background="@drawable/details_button_background"
-                                        android:onClick="@{(view)->main.onButtonShowDetailsCastAndCrew(view)}"/>
-
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginTop="20dp"
                                     android:orientation="vertical"
-                                    android:animateLayoutChanges="true"
-                                    android:visibility="@{main.expandableDetailsCastAndCrewObservable ? View.VISIBLE:View.GONE}">
+                                    android:background="@color/black">
 
-                                    <TextView
+                                    <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:textStyle="bold"
-                                        android:textSize="20sp"
-                                        android:textColor="#FF9800"
-                                        android:fontFamily="monospace"
-                                        android:visibility="@{main.movieObservableField.staff.casts  != null ? View.VISIBLE:View.GONE}"
-                                        android:text="Cast Details"
-                                        android:gravity="center"
-                                        android:layout_gravity="center"
-                                        android:layout_marginBottom="10dp"
-                                        android:textAlignment="center"/>
-                                    <androidx.recyclerview.widget.RecyclerView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:nestedScrollingEnabled="false"
-                                        android:background="@color/black"
-                                        android:id="@+id/recyclerViewCastDetails"
-                                        android:visibility="@{main.movieObservableField.staff.casts  != null ? View.VISIBLE:View.GONE}"
-                                        detailsCastAdapter="@{main.castDetailsAdapterObservableField}"/>
+                                        android:orientation="horizontal"
+                                        android:weightSum="3">
 
-                                    <TextView
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:textColor="@color/white"
+                                            android:text="Characters"
+                                            android:fontFamily="monospace"
+                                            android:textSize="20sp"
+                                            android:textStyle="bold"
+                                            android:layout_weight="1.5"/>
+
+                                        <TextView
+                                            android:layout_width="0dp"
+                                            android:layout_height="40dp"
+                                            android:layout_weight="1.5"
+                                            android:textSize="20sp"
+                                            android:text="Details"
+                                            android:gravity="center"
+                                            android:layout_marginStart="20dp"
+                                            android:textColor="@color/white"
+                                            android:fontFamily="monospace"
+                                            android:background="@drawable/details_button_background"
+                                            android:onClick="@{(view)->main.onButtonShowDetailsCastAndCrew(view)}"/>
+
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:textStyle="bold"
-                                        android:textSize="20sp"
-                                        android:textColor="#FF9800"
-                                        android:textAlignment="center"
-                                        android:fontFamily="monospace"
-                                        android:gravity="center"
-                                        android:layout_gravity="center"
-                                        android:layout_marginBottom="10dp"
+                                        android:layout_height="match_parent"
                                         android:layout_marginTop="20dp"
-                                        android:visibility="@{main.movieObservableField.staff.crews  != null ? View.VISIBLE:View.GONE}"
-                                        android:text="Crew Details"/>
-                                    <androidx.recyclerview.widget.RecyclerView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:nestedScrollingEnabled="false"
-                                        android:background="@color/black"
-                                        android:id="@+id/recyclerViewCrewDetails"
-                                        android:visibility="@{main.movieObservableField.staff.crews  != null ? View.VISIBLE:View.GONE}"
-                                        detailsCrewAdapter="@{main.crewDetailsAdapterObservableField}"/>
+                                        android:orientation="vertical"
+                                        android:animateLayoutChanges="true"
+                                        android:visibility="@{main.expandableDetailsCastAndCrewObservable ? View.VISIBLE:View.GONE}">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textStyle="bold"
+                                            android:textSize="20sp"
+                                            android:textColor="#FF9800"
+                                            android:fontFamily="monospace"
+                                            android:visibility="@{main.movieObservableField.staff.casts  != null ? View.VISIBLE:View.GONE}"
+                                            android:text="Cast Details"
+                                            android:gravity="center"
+                                            android:layout_gravity="center"
+                                            android:layout_marginBottom="10dp"
+                                            android:textAlignment="center"/>
+                                        <androidx.recyclerview.widget.RecyclerView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:nestedScrollingEnabled="false"
+                                            android:background="@color/black"
+                                            android:id="@+id/recyclerViewCastDetails"
+                                            android:visibility="@{main.movieObservableField.staff.casts  != null ? View.VISIBLE:View.GONE}"
+                                            detailsCastAdapter="@{main.castDetailsAdapterObservableField}"/>
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:textStyle="bold"
+                                            android:textSize="20sp"
+                                            android:textColor="#FF9800"
+                                            android:textAlignment="center"
+                                            android:fontFamily="monospace"
+                                            android:gravity="center"
+                                            android:layout_gravity="center"
+                                            android:layout_marginBottom="10dp"
+                                            android:layout_marginTop="20dp"
+                                            android:visibility="@{main.movieObservableField.staff.crews  != null ? View.VISIBLE:View.GONE}"
+                                            android:text="Crew Details"/>
+                                        <androidx.recyclerview.widget.RecyclerView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:nestedScrollingEnabled="false"
+                                            android:background="@color/black"
+                                            android:id="@+id/recyclerViewCrewDetails"
+                                            android:visibility="@{main.movieObservableField.staff.crews  != null ? View.VISIBLE:View.GONE}"
+                                            detailsCrewAdapter="@{main.crewDetailsAdapterObservableField}"/>
+                                    </LinearLayout>
+
                                 </LinearLayout>
 
-                            </LinearLayout>
 
+                            </com.google.android.material.card.MaterialCardView>
 
-                        </com.google.android.material.card.MaterialCardView>
+                        </LinearLayout>
 
                     </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </RelativeLayout>
 
         </androidx.core.widget.NestedScrollView>
 

@@ -1,6 +1,12 @@
 package com.example.movies.utils;
 
+import static com.example.movies.activity.DetailsMovieActivity.chipTextClicked;
+import static com.example.movies.activity.DetailsMovieActivity.movieByChipGenres;
+import static com.example.movies.activity.DetailsMovieActivity.moviesAdapterByGenresObservableFieldDetails;
 import static com.example.movies.activity.MainActivity.movieResources;
+import static com.example.movies.activity.MainActivity.parentAdapterObservableField;
+import static com.example.movies.resources.MovieResources.mapGenresID;
+
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -13,9 +19,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.databinding.BindingAdapter;
+import androidx.databinding.ObservableField;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.movies.R;
 import com.example.movies.adapter.CastAdapter;
@@ -26,11 +35,14 @@ import com.example.movies.adapter.MovieAdapterByIDOfCastCrew;
 import com.example.movies.adapter.MovieAdapterMovieID;
 import com.example.movies.adapter.MoviesAdapterByGenres;
 import com.example.movies.adapter.ParentAdapter;
+import com.example.movies.adapter.SearchMovieAdapter;
 import com.example.movies.adapter.VideosAdapter;
+import com.example.movies.api.APIGetData;
 import com.example.movies.model.Cast;
 import com.example.movies.model.Crew;
 import com.example.movies.model.GenreObject;
 import com.example.movies.model.MovieObject;
+import com.example.movies.resources.MovieResources;
 import com.google.android.material.chip.Chip;
 import com.squareup.picasso.Picasso;
 
@@ -213,6 +225,23 @@ public class BindingUtils {
     }
 
 
+    //ADAPTER FOR RECYCLER VIEW SHOW MOVIE BY CHIP GENRES
+    @BindingAdapter("typeMovie")
+    public static void setAdapterMovieByChipGenre(RecyclerView recyclerView,String type){
+        MoviesAdapterByGenres moviesAdapterByGenres = getMoviesAdapterByGenres(type);
+        ObservableField<MoviesAdapterByGenres> moviesAdapterByGenresObservableField = new ObservableField<>(moviesAdapterByGenres);
+        moviesAdapterByGenresObservableFieldDetails.set(moviesAdapterByGenresObservableField.get());
+        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(moviesAdapterByGenresObservableField.get());
+
+    }
+
+
+
+
+
     //GET THUMBNAIL OF VIDEO FROM YOUTUBE
     //https://img.youtube.com/vi/<insert-youtube-video-id-here>/hqdefault.jpg
     @BindingAdapter("getThumbnail")
@@ -288,6 +317,7 @@ public class BindingUtils {
     //ADD GENRES TO GRIDVIEW
     @BindingAdapter("addGenres")
     public static void addGenresToGridView(GridLayout gridLayout, MovieObject.Movie movie){
+
         //REMOVE ALL VIEWS DEFAULT ON GRIDLAYOUT
         if(movie.getGenres() != null){
             gridLayout.removeAllViews();
@@ -297,6 +327,19 @@ public class BindingUtils {
                 chip.setTextSize(16);
                 chip.setGravity(Gravity.CENTER);
                 chip.setText(a.getNameGenre());
+                chip.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String type = chip.getText().toString().replace("\\s{2,}","").trim();
+                        String id = mapGenresID.get(type);
+                        for (String a : mapGenresID.keySet()){
+                            Log.i("AAA","KEY SET : "+a);
+                        }
+                        Log.i("AAA","ID GENRES : "+id);
+                        chipTextClicked.set(type);
+                        movieByChipGenres.set(true);
+                    }
+                });
                 //ADD CHIP TO GRIDLAYOUT
                 gridLayout.addView(chip);
             }
@@ -438,6 +481,93 @@ public class BindingUtils {
         textView.setText(String.join(", ",text));
     }
 
+
+    //BINDING AUTO SCROLL WHEN STATE CHANGE FOR RECYCLER VIEW
+    @BindingAdapter("stateChanged")
+    public static void setStateChangedForRecyclerView(RecyclerView recyclerView,boolean bool){
+        recyclerView.smoothScrollToPosition(0);
+    }
+
+    //BINDING AUTO SCROLL WHEN STATE CHANGE FOR NESTED SCROLL VIEW
+    @BindingAdapter("stateChanged")
+    public static void setStateChangedForNestedScrollView(NestedScrollView nestedScrollView, boolean bool){
+        nestedScrollView.smoothScrollTo(0,0);
+        if(bool){
+            nestedScrollView.setTouchscreenBlocksFocus(true);
+            nestedScrollView.setSmoothScrollingEnabled(false);
+            nestedScrollView.setNestedScrollingEnabled(false);
+            nestedScrollView.setEnabled(false);
+        }
+        else{
+            nestedScrollView.setTouchscreenBlocksFocus(false);
+            nestedScrollView.setSmoothScrollingEnabled(true);
+            nestedScrollView.setNestedScrollingEnabled(true);
+            nestedScrollView.setEnabled(true);
+        }
+    }
+
+    public static MoviesAdapterByGenres getMoviesAdapterByGenres(String type){
+        switch (type){
+            case Utils.now_playing:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.NowPlayingMoviesAdapterObservableField.get();
+            case Utils.popular:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.PopularMoviesAdapterObservableField.get();
+            case Utils.top_rated:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.TopRateMoviesAdapterObservableField.get();
+            case Utils.upcoming:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.UpComingMoviesAdapterObservableField.get();
+            case Utils.ActionMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.ActionMoviesAdapterObservableField.get();
+            case Utils.AdventureMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.AdventureMoviesAdapterObservableField.get();
+            case Utils.AnimationMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.AnimationMoviesAdapterObservableField.get();
+            case Utils.ComedyMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.ComedyMoviesAdapterObservableField.get();
+            case Utils.CrimeMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.CrimeMoviesAdapterObservableField.get();
+            case Utils.DocumentaryMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.DocumentaryMoviesAdapterObservableField.get();
+            case Utils.DramaMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.DramaMoviesAdapterObservableField.get();
+            case Utils.FamilyMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.FamilyMoviesAdapterObservableField.get();
+            case Utils.FantasyMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.FantasyMoviesAdapterObservableField.get();
+            case Utils.HistoryMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.HistoryMoviesAdapterObservableField.get();
+            case Utils.HorrorMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.HorrorMoviesAdapterObservableField.get();
+            case Utils.MusicMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.MusicMoviesAdapterObservableField.get();
+            case Utils.MysteryMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.MysteryMoviesAdapterObservableField.get();
+            case Utils.RomanceMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.RomanceMoviesAdapterObservableField.get();
+            case Utils.ScienceFictionMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.ScienceFictionMoviesAdapterObservableField.get();
+            case Utils.TVMovie:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.TVMoviesAdapterObservableField.get();
+            case Utils.ThrillerMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.ThrillerMoviesAdapterObservableField.get();
+            case Utils.WarMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.WarMoviesObservableField.get();
+            case Utils.WesternMovies:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.WesternMoviesAdapterObservableField.get();
+            default:
+                return Objects.requireNonNull(parentAdapterObservableField.get()).adapterManager.ActionMoviesAdapterObservableField.get();
+        }
+    }
+
+
+    //ADAPTER FOR SEARCH MOVIE BY KEYWORD
+    @BindingAdapter("searchMovieAdapter")
+    public static void setAdapterSearchMovie(RecyclerView recyclerView, SearchMovieAdapter searchMovieAdapter){
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(staggeredGridLayoutManager);
+        recyclerView.setAdapter(searchMovieAdapter);
+    }
 
 
 }

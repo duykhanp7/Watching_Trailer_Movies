@@ -280,6 +280,7 @@
             app:borderWidth="0dp"
             android:id="@+id/buttonScrollToTop"
             android:contentDescription="TODO"
+            android:visibility="gone"
             android:onClick="@{()->main.onButtonScrollToTopClicked()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

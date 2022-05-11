@@ -5,7 +5,9 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ObservableField;
 import androidx.recyclerview.widget.LinearSnapHelper;
@@ -15,10 +17,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.movies.adapter.AdapterManager;
 import com.example.movies.adapter.MoviesAdapterByGenres;
 import com.example.movies.adapter.ParentAdapter;
+import com.example.movies.adapter.SearchMovieAdapter;
+import com.example.movies.api.APIGetData;
 import com.example.movies.databinding.ActivityMainBinding;
 import com.example.movies.listener.IUpdateData;
 import com.example.movies.model.MovieObject;
@@ -31,6 +36,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class MainActivity extends AppCompatActivity implements IMovieItemClickListener, IUpdateData {
 
@@ -39,7 +48,9 @@ public class MainActivity extends AppCompatActivity implements IMovieItemClickLi
     public AdapterManager adapterManager;
     public ParentAdapter parentAdapter;
     public static ObservableField<ParentAdapter> parentAdapterObservableField = new ObservableField<>();
-
+    public ObservableField<Boolean> isSearchMovie = new ObservableField<>(false);
+    public ObservableField<Boolean> hasSearched = new ObservableField<>(false);
+    public ObservableField<SearchMovieAdapter> searchMovieAdapterObservableField = new ObservableField<>(new SearchMovieAdapter(this));
     //ACTIVITY RESULT : GET DATA LIST TRAILER RETURN
     public final ActivityResultLauncher<Intent> mResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -61,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements IMovieItemClickLi
         super.onCreate(savedInstanceState);
 
         Log.i("AAA","ON RECREWTE");
-
         //ADAPTER MANAGER
         adapterManager = new AdapterManager();
         //LATEST ADAPTER
@@ -199,6 +209,32 @@ public class MainActivity extends AppCompatActivity implements IMovieItemClickLi
         snapHelper.attachToRecyclerView(activityMainBinding.recyclerViewListMovies);
 
 
+        activityMainBinding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String keyword = query.trim();
+                hasSearched.set(true);
+                Objects.requireNonNull(searchMovieAdapterObservableField.get()).setKeyword(keyword);
+                APIGetData.apiGetData.getMovieByKeyword(keyword,"1").enqueue(new Callback<MovieObject>() {
+                    @Override
+                    public void onResponse(@NonNull Call<MovieObject> call, @NonNull Response<MovieObject> response) {
+                        Objects.requireNonNull(searchMovieAdapterObservableField.get()).setMoviesSearch(Objects.requireNonNull(response.body()).getMoviesList());
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<MovieObject> call, @NonNull Throwable t) {
+
+                    }
+                });
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
     }
 
     @Override
@@ -209,11 +245,10 @@ public class MainActivity extends AppCompatActivity implements IMovieItemClickLi
 
     //OVERRIDE FUNCTION FOR ITEM CLICKED
     @Override
-    public void itemClicked(MovieObject.Movie item,String type) {
+    public void itemClicked(MovieObject.Movie item) {
         Intent intent = new Intent(MainActivity.this, DetailsMovieActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("item",item);
-        bundle.putSerializable("type",type);
         intent.putExtra("bundle",bundle);
         mResultLauncher.launch(intent);
     }
@@ -414,9 +449,21 @@ public class MainActivity extends AppCompatActivity implements IMovieItemClickLi
     protected void onPause() {
         super.onPause();
     }
+
+    public void onButtonSearchClickedMain(){
+        Toast.makeText(getApplicationContext(),"TAO DANG NHAN NE",Toast.LENGTH_LONG).show();
+        isSearchMovie.set(true);
+    }
+
+    @Override
+    public void onBackPressed() {
+        hasSearched.set(false);
+        if(isSearchMovie.get()){
+            isSearchMovie.set(false);
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
 }
 
-//PROBLEMS
-//TẠO IMAGE SLIDER CHO HÌNH ẢNH CỦA BỘ PHIM HOẶC NHÂN VẬT VÀ ĐẠO DIỄN
-//NẾU CÓ TỪ HAI HÌNH TRỞ LÊN
-//NÚT BUTTON SCROLL TO TOP KHI SCROLL XUỐNG

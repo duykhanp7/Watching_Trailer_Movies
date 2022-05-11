@@ -27,18 +27,21 @@
         <activity
             android:name=".activity.DetailsCharacterActivity"
             android:exported="false"
-            android:parentActivityName=".activity.DetailsMovieActivity" />
+            android:parentActivityName=".activity.DetailsMovieActivity"
+            android:theme="@style/Theme.SendingEmail"/>
         <activity
             android:name=".activity.WatchTrailerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:enabled="true"
             android:exported="false"
-            android:parentActivityName=".activity.DetailsMovieActivity" />
+            android:parentActivityName=".activity.DetailsMovieActivity"
+            android:theme="@style/Theme.SendingEmail"/>
         <activity
             android:name=".activity.DetailsMovieActivity"
             android:enabled="true"
             android:exported="false"
-            android:parentActivityName=".activity.MainActivity" />
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/Theme.SendingEmail"/>
         <activity
             android:name=".activity.MainActivity"
             android:enabled="true"

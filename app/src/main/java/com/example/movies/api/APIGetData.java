@@ -78,4 +78,8 @@ public interface APIGetData {
     //GET CREW DETAILS
     @GET("3/person/{id}?api_key=904b3059ddd54e71c45dc72502d59375&append_to_response=movie_credits,tv_credits,external_ids,images")
     Call<Crew> getCrewDetails(@Path("id") String id);
+    //GET MOVIES BY KEYWORD, THEN FILTER IT WITH GENRES ID
+    //https://api.themoviedb.org/3/search/movie?api_key=904b3059ddd54e71c45dc72502d59375&query=the+avengers&page=2
+    @GET("3/search/movie?api_key=904b3059ddd54e71c45dc72502d59375")
+    Call<MovieObject> getMovieByKeyword(@Query("query") String keyword, @Query("page") String page);
 }

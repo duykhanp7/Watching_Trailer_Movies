@@ -11,9 +11,22 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">#FF9800</item>
         <item name="fontFamily">monospace</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">#FF9800</item>
+        <item name="android:windowAnimationStyle">@style/customAnimationSwitchActivity</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:textCursorDrawable"> @drawable/cursor_drawable</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="customAnimationSwitchActivity">
+            <item name="android:activityOpenEnterAnimation">@anim/anim_activity_open_enter</item>
+            <item name="android:activityOpenExitAnimation">@anim/anim_activity_open_exit</item>
+            <item name="android:activityCloseEnterAnimation">@anim/anim_activity_close_enter</item>
+            <item name="android:activityCloseExitAnimation">@anim/anim_activity_close_exit</item>
+    </style>
+
 </resources>

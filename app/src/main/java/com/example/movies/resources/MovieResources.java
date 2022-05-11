@@ -64,11 +64,13 @@ public class MovieResources extends BaseObservable {
 
     //LIST OF LIST MOVIES OBJECT
     public Map<String,List<MovieObject>> mapAdapter;
+    //MAP NAME WITH ID GENRES
+    public static Map<String,String> mapGenresID;
 
     public MovieResources(IUpdateData updateData){
         this.updateData = updateData;
         mapAdapter = new HashMap<>();
-
+        mapGenresID = new HashMap<>();
         //GENRE
         GenresMovie = new GenreObject();
         //TOP MOVIE
@@ -172,6 +174,7 @@ public class MovieResources extends BaseObservable {
                         Utils.titleGenres.add("Up Coming");
                         for (GenreObject.Genre item : response.body().getGenres()){
                             Utils.titleGenres.add(item.getNameGenre());
+                            mapGenresID.put(item.getNameGenre().replace("\\s{2,}","").trim(),item.getIdGenre());
                         }
                         updateData.updateTitle();
                         getAllMoviesFromDiscoverByGenre();
@@ -198,6 +201,9 @@ public class MovieResources extends BaseObservable {
                 if(response.body().getMoviesList().size() > 0){
                     Objects.requireNonNull(mapAdapter.get(type)).add(response.body());
                     updateData.update(response.body().getMoviesList(),type);
+                }
+                for (MovieObject.Movie item : response.body().getMoviesList()){
+                    Log.i("AAA","ITEM MOVIE : "+item.getTitle());
                 }
             }
 

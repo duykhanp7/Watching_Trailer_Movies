@@ -16,24 +16,25 @@
     <com.google.android.material.card.MaterialCardView
         xmlns:bind="http://schemas.android.com/apk/res-auto"
         android:layout_width="110dp"
-        android:layout_height="160dp"
+        android:layout_height="180dp"
         bind:cardCornerRadius="4dp"
         bind:cardElevation="0dp"
         android:background="@color/white"
         android:layout_marginStart="10dp"
         android:minWidth="0dp"
+        android:layout_marginTop="20dp"
         bind:cardPreventCornerOverlap="true"
         >
         <RelativeLayout
             android:layout_width="110dp"
-            android:layout_height="160dp"
+            android:layout_height="180dp"
             android:background="#D1D1D1">
 
             <ImageView
                 android:id="@+id/poster"
                 android:scaleType="centerCrop"
                 android:layout_width="110dp"
-                android:layout_height="160dp"
+                android:layout_height="180dp"
                 bind:imageURLMovie="@{itemFilm}" />
 
         </RelativeLayout>

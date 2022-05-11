@@ -10,7 +10,10 @@ import androidx.databinding.ObservableField;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.example.movies.R;
 import com.example.movies.adapter.MovieAdapterByIDOfCastCrew;
@@ -43,12 +46,19 @@ public class DetailsCharacterActivity extends AppCompatActivity implements IMovi
     //ADAPTER
     public MovieAdapterByIDOfCastCrew movieAdapterByIDOfCastCrew;
     public ObservableField<MovieAdapterByIDOfCastCrew> movieAdapterByIDOfCastCrewObservableField;
+    //ANIMATION FOR BUTTON SCROLL TO TOP
+    Animation animationGone;
+    Animation animationShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         //INITIALIZE
+        //ANIMATIONS
+        animationGone = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_hide);
+        animationShow = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.anim_floating_show);
 
         bundle = getIntent().getBundleExtra("bundle");
         type = bundle.getString("type");
@@ -71,18 +81,20 @@ public class DetailsCharacterActivity extends AppCompatActivity implements IMovi
         binding = DataBindingUtil.setContentView(this,R.layout.activity_details_character);
         binding.setMain(this);
 
+
         binding.nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if(!v.canScrollVertically(-1)){
                     binding.buttonScrollToTop.setVisibility(View.GONE);
+                    binding.buttonScrollToTop.startAnimation(animationGone);
                 }
                 else{
+                    binding.buttonScrollToTop.startAnimation(animationShow);
                     binding.buttonScrollToTop.setVisibility(View.VISIBLE);
                 }
             }
         });
-
     }
 
     //BUTTON ADD TO FAVORITES
