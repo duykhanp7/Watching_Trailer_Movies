@@ -6,6 +6,8 @@
         <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/drawable/backgound_text_null.xml" value="0.119" />
         <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/drawable/background_corner_search_view.xml" value="0.1345" />
         <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/drawable/background_corner_top.xml" value="0.1345" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/drawable/cirlce_brown_background.xml" value="0.2075" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/drawable/cirle_image.xml" value="0.12" />
         <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/drawable/cursor_drawable.xml" value="0.1345" />
         <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/drawable/custom_button_stop_watching.xml" value="0.1275" />
         <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/drawable/details_button_background.xml" value="0.144" />
@@ -15,6 +17,7 @@
         <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/activity_main.xml" value="0.16032608695652173" />
         <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/activity_movie_details.xml" value="0.22" />
         <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/activity_playing_trailer.xml" value="0.16847826086956522" />
+        <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/activity_splash_screen.xml" value="0.18614130434782608" />
         <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/activity_watch_trailer.xml" value="0.2" />
         <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/bottom_sheet_show_trailer.xml" value="0.16847826086956522" />
         <entry key="..\:/Users/duy khan/AndroidStudioProjects/SendingEmail/app/src/main/res/layout/item_cast_details_layout.xml" value="0.2" />

@@ -25,32 +25,36 @@
         android:theme="@style/Theme.SendingEmail"
         android:usesCleartextTraffic="true" >
         <activity
+            android:name=".activity.SplashScreen"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activity.DetailsCharacterActivity"
             android:exported="false"
             android:parentActivityName=".activity.DetailsMovieActivity"
-            android:theme="@style/Theme.SendingEmail"/>
+            android:theme="@style/Theme.SendingEmail" />
         <activity
             android:name=".activity.WatchTrailerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:enabled="true"
             android:exported="false"
             android:parentActivityName=".activity.DetailsMovieActivity"
-            android:theme="@style/Theme.SendingEmail"/>
+            android:theme="@style/Theme.SendingEmail" />
         <activity
             android:name=".activity.DetailsMovieActivity"
             android:enabled="true"
             android:exported="false"
             android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/Theme.SendingEmail"/>
+            android:theme="@style/Theme.SendingEmail" />
         <activity
             android:name=".activity.MainActivity"
             android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="true" >
         </activity>
     </application>
 
